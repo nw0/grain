@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
@@ -34,7 +36,8 @@ class IngredientCategory(models.Model):
     parent = models.ForeignKey('self', default=None, blank=True, null=True)
     name = models.CharField(max_length=40)
 
-    # FIXME: is verbose_name required?
+    class Meta:
+        verbose_name_plural = "ingredient categories"
 
     @python_2_unicode_compatible
     def __str__(self):
@@ -54,7 +57,29 @@ class Product(models.Model):
         return self.name
 
 
-# TODO: class Ingredient
+class Ingredient(models.Model):
+    """Specific instances of ingredients"""
+    BEST_BEFORE, EXPIRES = "BBF", "EXP"
+    EXP_CHOICES = (
+        (BEST_BEFORE, "best before"),
+        (EXPIRES, "expires")
+    )
+
+    owner = models.ForeignKey(UserProfile)
+    product = models.ForeignKey(Product)
+    price = MoneyField(max_digits=10, decimal_places=2, default_currency='GBP')
+    used_amount = models.FloatField(default=0)
+    best_before = models.DateField(blank=True)
+    expiry_type = models.CharField(max_length=3, choices=EXP_CHOICES)
+    purchase_date = models.DateField(default=date.today)
+    exhausted = models.BooleanField(default=False)
+
+    @python_2_unicode_compatible
+    def __str__(self):
+        return "%s" % self.product
+
+
 # TODO: class Ticket
 # TODO: class Dish
 # TODO: class Meal
+# TODO: event log
