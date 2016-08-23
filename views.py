@@ -1,3 +1,18 @@
-from django.shortcuts import render
+from datetime import date
 
-# Create your views here.
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views import generic
+
+from .models import Meal
+
+def cal_redirect(request):
+    return HttpResponseRedirect(reverse('grain:calendar',
+                                kwargs={'year': date.today().strftime("%Y"),
+                                        'month': date.today().strftime("%b")}))
+
+
+class MealMonthArchive(generic.dates.MonthArchiveView):
+    queryset = Meal.objects.all()
+    date_field = "time"
+    allow_future = True

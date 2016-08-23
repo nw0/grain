@@ -1,0 +1,23 @@
+{% extends "grain/base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}Grain: Calendar{% endblock title %}
+
+{% block content %}
+<h1>Calendar</h1>
+
+<ul>
+    {% for meal in object_list %}
+        <li>{{ meal.time|date:"F j, Y" }}: {{ meal }}</li>
+    {% endfor %}
+</ul>
+
+<p>
+    {% if previous_month %}
+        Previous Month: {{ previous_month|date:"F Y" }}
+    {% endif %}
+    {% if next_month %}
+        Next Month: {{ next_month|date:"F Y" }}
+    {% endif %}
+</p>
+{% endblock content %}
