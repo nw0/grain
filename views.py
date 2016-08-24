@@ -26,8 +26,9 @@ class MealDetail(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(MealDetail, self).get_context_data(**kwargs)
         context['cost_total'] = self.object.cost_closed + self.object.cost_open
-        context['cost_pc_closed'] = 100 * self.object.cost_closed \
-                                        / context['cost_total']
-        context['cost_pc_open'] = 100 * self.object.cost_open \
-                                      / context['cost_total']
+        if context['cost_total']:
+            context['cost_pc_closed'] = 100 * self.object.cost_closed \
+                                            / context['cost_total']
+            context['cost_pc_open'] = 100 * self.object.cost_open \
+                                          / context['cost_total']
         return context
