@@ -10,7 +10,7 @@ from .models import Meal
 def cal_redirect(request):
     return HttpResponseRedirect(reverse('grain:calendar',
                                 kwargs={'year': date.today().strftime("%Y"),
-                                        'month': date.today().strftime("%b")}))
+                                        'month': date.today().strftime("%m")}))
 
 
 class MealMonthArchive(generic.dates.MonthArchiveView):

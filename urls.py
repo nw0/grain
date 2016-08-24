@@ -11,7 +11,7 @@ urlpatterns = [
         views.cal_redirect,
         name="calendar_redirect"),
 
-    url(r'^cal/(?P<year>[0-9]{4})/(?P<month>[-\w]+)/$',
-        views.MealMonthArchive.as_view(),
+    url(r'^cal/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/$',
+        views.MealMonthArchive.as_view(month_format='%m'),
         name="calendar"),
 ]
