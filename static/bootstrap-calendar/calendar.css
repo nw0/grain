@@ -426,7 +426,7 @@ Adaptations by Nicholas Sim
 .cal-year-box [class*="span"],
 .cal-month-box [class*="cal-cell"] {
   min-height: 100px;
-  border-right: 1px solid #e1e1e1;
+  border-right: 1px solid #cccccc;
   position: relative;
 }
 .cal-year-box [class*="span"] {
@@ -438,7 +438,7 @@ Adaptations by Nicholas Sim
 }
 .cal-year-box .row-fluid,
 .cal-month-box .cal-row-fluid {
-  border-bottom: 1px solid #e1e1e1;
+  border-bottom: 1px solid #aaa;
   margin-left: 0px;
   margin-right: 0px;
 }
@@ -449,10 +449,7 @@ Adaptations by Nicholas Sim
 .cal-month-box,
 .cal-year-box,
 .cal-week-box {
-  border-top: 1px solid #e1e1e1;
-  border-bottom: 1px solid #e1e1e1;
-  border-right: 1px solid #e1e1e1;
-  border-left: 1px solid #e1e1e1;
+  border: 1px solid #ddd;
   border-radius: 2px;
 }
 span[data-cal-date] {
@@ -521,6 +518,11 @@ span[data-cal-date] {
   color: #ffffff;
   font-weight: normal;
   line-height: 22px;
+}
+.day-content {
+    padding: 1rem .7rem .3rem .7rem;
+    position: absolute;
+    bottom: 0;
 }
 .events-list {
   max-height: 47px;

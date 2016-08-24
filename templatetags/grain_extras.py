@@ -1,42 +1,42 @@
+from datetime import timedelta
+
 from django import template
-from django.core.urlresolvers import reverse
 
 register = template.Library()
 
 
 @register.inclusion_tag('grain/cal/calendar.html')
-def calendar():
-    week1 = [
-        {   'day_of_week': "1",
-            'inmonth': False,
-            'date_str': "2013-02-24",
-            'day': "24" },
-        {   'day_of_week': "2",
-            'inmonth': False,
-            'date_str': "2013-02-25",
-            'day': "25" },
-        {   'day_of_week': "3",
-            'inmonth': False,
-            'date_str': "2013-02-26",
-            'day': "26" },
-        {   'day_of_week': "4",
-            'inmonth': False,
-            'date_str': "2013-02-27",
-            'day': "27" },
-        {   'day_of_week': "5",
-            'inmonth': False,
-            'date_str': "2013-02-28",
-            'day': "28" },
-        {   'day_of_week': "6",
-            'inmonth': True,
-            'date_str': "2013-03-01",
-            'day': "1" },
-        {   'day_of_week': "7",
-            'inmonth': True,
-            'date_str': "2013-03-02",
-            'day': "2" }
-    ]
-    return {'rows': [week1, []]}
+def calendar(month, meals):
+    rows = []
+    current_day = month - timedelta(days=month.weekday())
+    month_end = False
+    meals, meal_it = meals.order_by('time'), 0
+    meal_count = len(meals)
+
+    while not month_end:
+        week = []
+        for d in range(1, 8):
+            day = { 'day_of_week': str(d),
+                    'inmonth': current_day.month == month.month,
+                    'date_str': current_day.strftime("%Y-%m-%d"),
+                    'day': current_day.day }
+
+            while (meal_it < meal_count and
+                   current_day == meals[meal_it].time.date()):
+                if 'content' not in day:
+                    day['content'] = ""
+                day['content'] += meals[meal_it].get_meal_type_display()
+                meal_it += 1
+
+            current_day += timedelta(days=1)
+            week.append(day)
+
+        rows.append(week)
+        if current_day.weekday() == 0 and current_day.month > month.month:
+            month_end = True
+
+    return {'month': month, 'rows': rows}
+
 
 @register.inclusion_tag('grain/cal/cell.html')
 def cal_cell(cell):
