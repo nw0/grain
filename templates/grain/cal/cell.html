@@ -1,0 +1,5 @@
+<div class="cal-cell1 cal-cell" data-cal-row="-day{{ cell.day_of_week }}">
+    <div class="cal-month-day {% if cell.inmonth %}cal-day-inmonth{% else %}cal-day-outmonth{% endif %}">
+        <span class="pull-right" data-cal-date="{{ cell.date_str }}" data-cal-view="day" data-toggle="tooltip" title data-original-title>{{ cell.day }}</span>
+    </div>
+</div>

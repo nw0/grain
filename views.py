@@ -6,6 +6,7 @@ from django.views import generic
 
 from .models import Meal
 
+
 def cal_redirect(request):
     return HttpResponseRedirect(reverse('grain:calendar',
                                 kwargs={'year': date.today().strftime("%Y"),

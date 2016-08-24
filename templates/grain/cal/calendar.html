@@ -1,0 +1,24 @@
+{% load grain_extras %}
+<div class="col-md-9">
+    <h3>Month</h3>
+    <div id="calendar" class="cal-context" style="width: 100%">
+        <div class="cal-row-fluid cal-row-head">
+            <div class="cal-cell1">Monday</div>
+            <div class="cal-cell1">Tuesday</div>
+            <div class="cal-cell1">Wednesday</div>
+            <div class="cal-cell1">Thursday</div>
+            <div class="cal-cell1">Friday</div>
+            <div class="cal-cell1">Saturday</div>
+            <div class="cal-cell1">Sunday</div>
+        </div>
+        <div class="cal-month-box">
+            {% for row in rows %}
+            <div class="cal-row-fluid">
+                {% for cell in row %}
+                {% cal_cell cell %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

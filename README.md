@@ -10,3 +10,6 @@ It should be more modular than [Mealy](https://github.com/nw0/mealy/), with rewo
 1. [`django-bootstrap3`](https://github.com/dyve/django-bootstrap3) for forms
 1. [`django-money`](https://github.com/django-money/django-money/)
 1. `radix`: not publicly available: to reduce `templatetags` duplication. See `nav_active` methods in my other applications.
+
+## Code used
+1. [`bootstrap-calendar`](https://github.com/Serhioromano/bootstrap-calendar/). Adapted code and css for use in meal calendar.

@@ -1,10 +1,24 @@
 {% extends "grain/base.html" %}
+{% load staticfiles %}
 {% load bootstrap3 %}
+{% load grain_extras %}
+
+{% block scripts %}
+<link href="{% static 'bootstrap-calendar/calendar.css' %}" rel="stylesheet">
+{% endblock scripts %}
 
 {% block title %}Grain: Calendar{% endblock title %}
 
 {% block content %}
 <h1>Calendar</h1>
+
+<div class="row">
+    {% calendar %}
+    <div class="col-md-3">
+        <h3>Side column</h3>
+        <p>Some filler text here: this will be the meal add form, as expected</p>
+    </div>
+</div>
 
 <ul>
     {% for meal in object_list %}
