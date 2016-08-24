@@ -7,35 +7,29 @@ register = template.Library()
 
 @register.inclusion_tag('grain/cal/calendar.html')
 def calendar(month, meals):
-    rows = []
+    weeks = []
     current_day = month - timedelta(days=month.weekday())
-    month_end = False
-    meals, meal_it = meals.order_by('time'), 0
-    meal_count = len(meals)
+    meals, meal_it, meal_count = meals.order_by('time'), 0, len(meals)
 
-    while not month_end:
+    while current_day.month <= month.month:
         week = []
         for d in range(1, 8):
-            day = { 'day_of_week': str(d),
-                    'inmonth': current_day.month == month.month,
-                    'date_str': current_day.strftime("%Y-%m-%d"),
-                    'day': current_day.day }
+            day = {
+                'day_of_week': str(d),
+                'inmonth': current_day.month == month.month,
+                'date': current_day,
+                'meals': [],
+            }
 
             while (meal_it < meal_count and
                    current_day == meals[meal_it].time.date()):
-                if 'content' not in day:
-                    day['content'] = ""
-                day['content'] += meals[meal_it].get_meal_type_display()
+                day['meals'].append(meals[meal_it])
                 meal_it += 1
 
             current_day += timedelta(days=1)
             week.append(day)
-
-        rows.append(week)
-        if current_day.weekday() == 0 and current_day.month > month.month:
-            month_end = True
-
-    return {'month': month, 'rows': rows}
+        weeks.append(week)
+    return {'month': month, 'weeks': weeks}
 
 
 @register.inclusion_tag('grain/cal/cell.html')

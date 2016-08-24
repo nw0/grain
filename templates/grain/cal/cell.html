@@ -1,6 +1,10 @@
 <div class="cal-cell1 cal-cell" data-cal-row="-day{{ cell.day_of_week }}">
     <div class="cal-month-day {% if cell.inmonth %}cal-day-inmonth{% else %}cal-day-outmonth{% endif %}">
-        <span class="pull-right" data-cal-date="{{ cell.date_str }}" data-cal-view="day" data-toggle="tooltip" title data-original-title>{{ cell.day }}</span>
-        <div class="day-content">{{ cell.content }}</div>
+        <span class="pull-right" data-cal-date="{{ cell.date|date:"Y-m-d" }}" data-cal-view="day" data-toggle="tooltip" title data-original-title>{{ cell.date|date:"j" }}</span>
+        <div class="day-content">
+            {% for meal in cell.meals %}
+            {{ meal.get_meal_type_display }}<br>
+            {% endfor %}
+        </div>
     </div>
 </div>

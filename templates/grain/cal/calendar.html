@@ -12,10 +12,10 @@
             <div class="cal-cell1">Sunday</div>
         </div>
         <div class="cal-month-box">
-            {% for row in rows %}
+            {% for week in weeks %}
             <div class="cal-row-fluid">
-                {% for cell in row %}
-                {% cal_cell cell %}
+                {% for day in week %}
+                {% cal_cell day %}
                 {% endfor %}
             </div>
             {% endfor %}
