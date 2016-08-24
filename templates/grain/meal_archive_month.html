@@ -33,10 +33,4 @@
         <p>Some filler text here: this will be the meal add form, as expected</p>
     </div>
 </div>
-
-<ul>
-    {% for meal in object_list %}
-    <li>{{ meal.time|date:"F j, Y" }}: {{ meal }}</li>
-    {% endfor %}
-</ul>
 {% endblock content %}

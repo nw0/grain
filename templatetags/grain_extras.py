@@ -3,6 +3,7 @@ from datetime import timedelta, date
 from django import template
 
 register = template.Library()
+BASELINE_MAX = 4    # FIXME: magic: default max meal cost (progress bar)
 
 
 @register.inclusion_tag('grain/cal/calendar.html')
@@ -24,7 +25,14 @@ def calendar(month, meals):
 
             while (meal_it < meal_count and
                    current_day == meals[meal_it].time.date()):
-                day['meals'].append(meals[meal_it])
+                meal = meals[meal_it]
+                day['meals'].append({
+                    'meal': meal,
+                    'close_pc': 100 * meal.cost_closed.amount / BASELINE_MAX,
+                    'open_pc': 100 * meal.cost_open.amount / BASELINE_MAX,
+                    # TODO: consider bar UX for total_price = 0
+                    'total_price': meal.cost_closed + meal.cost_open,
+                    })
                 meal_it += 1
 
             current_day += timedelta(days=1)

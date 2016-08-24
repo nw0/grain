@@ -209,11 +209,12 @@ span[data-cal-date] {
 }
 .day-content {
     font-size: .85em;
-    padding: 1rem .7rem .3rem .7rem;
+    padding: .3rem .7rem;
     position: absolute;
     bottom: 0;
     left: 0;
     overflow: hidden;
+    width: 100%;
 }
 .cal-column {
   border-left: 1px solid #e1e1e1;

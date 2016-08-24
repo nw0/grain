@@ -14,6 +14,6 @@ def cal_redirect(request):
 
 
 class MealMonthArchive(generic.dates.MonthArchiveView):
-    queryset = Meal.objects.all()
+    queryset = Meal.objects.all()   # FIXME: only show current UserProfile
     date_field = "time"
     allow_future = True
