@@ -125,8 +125,8 @@ class Dish(models.Model):
     def __str__(self):
         tickets = self.ticket_set.all().order_by('-cost')
         if tickets.distinct().count() == 0:
-            return "%s (empty)" % self.cooking_style
-        return "%s %s" % (self.get_cooking_style_display(), tickets[0])
+            return "%s (empty)" % self.method
+        return "%s %s" % (self.get_method_display(), tickets[0])
 
 
 class Ticket(models.Model):
