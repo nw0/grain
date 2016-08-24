@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, date
 
 from django import template
 
@@ -18,6 +18,7 @@ def calendar(month, meals):
                 'day_of_week': str(d),
                 'inmonth': current_day.month == month.month,
                 'date': current_day,
+                'today': current_day == date.today(),
                 'meals': [],
             }
 
