@@ -13,7 +13,21 @@
 <h1>Calendar</h1>
 
 <div class="row">
-    {% calendar month object_list %}
+    <div class="col-md-9">
+        <h3>{{ month|date:"F Y" }}
+            <span class="pull-right">
+                <div class="btn-group" role="group">
+                    {% if previous_month %}
+                    <a href="{% url 'grain:calendar' previous_month.year previous_month.month %}" role="button" class="btn btn-default">&laquo; {{ previous_month|date:"N" }}</a>
+                    {% endif %}
+                    {% if next_month %}
+                    <a href="{% url 'grain:calendar' next_month.year next_month.month %}" role="button" class="btn btn-default">{{ next_month|date:"N" }} &raquo;</a>
+                    {% endif %}
+                </div>
+            </span>
+        </h3>
+        {% calendar month object_list %}
+    </div>
     <div class="col-md-3">
         <h3>Side column</h3>
         <p>Some filler text here: this will be the meal add form, as expected</p>
@@ -22,16 +36,7 @@
 
 <ul>
     {% for meal in object_list %}
-        <li>{{ meal.time|date:"F j, Y" }}: {{ meal }}</li>
+    <li>{{ meal.time|date:"F j, Y" }}: {{ meal }}</li>
     {% endfor %}
 </ul>
-
-<p>
-    {% if previous_month %}
-        Previous Month: {{ previous_month|date:"F Y" }}
-    {% endif %}
-    {% if next_month %}
-        Next Month: {{ next_month|date:"F Y" }}
-    {% endif %}
-</p>
 {% endblock content %}
