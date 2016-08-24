@@ -3,8 +3,8 @@
         <span class="pull-right" data-cal-date="{{ cell.date|date:"Y-m-d" }}" data-cal-view="day" data-toggle="tooltip" title data-original-title>{{ cell.date|date:"j" }}</span>
         <div class="day-content">
             {% for meal in cell.meals %}
-            <div class="meal-line" style="padding-top: .2rem">
-                <span class="meal-desc">{{ meal.meal.get_meal_type_display }} {{ meal.total_price }}</span>
+            <div class="meal-line" style="padding-top: .2rem;">
+                <span class="meal-desc"><a href="{% url 'grain:meal_detail' meal.meal.id %}">{{ meal.meal.get_meal_type_display }} {{ meal.total_price }}</a></span>
                 <span class="meal-prog">
                     <div class="progress" style="height: 2px; display: block; margin: 0;">
                         <div class="progress-bar progress-bar-success" style="width: {{ meal.close_pc }}%"></div>

@@ -1,4 +1,4 @@
-from datetime import timedelta, date
+from datetime import date, timedelta
 
 from django import template
 
@@ -44,3 +44,8 @@ def calendar(month, meals):
 @register.inclusion_tag('grain/cal/cell.html')
 def cal_cell(cell):
     return {'cell': cell}
+
+
+@register.inclusion_tag('grain/dish_list.html')
+def dish_list(meal):
+    return {'dishes': meal.dish_set.all}

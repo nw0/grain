@@ -1,0 +1,32 @@
+{% extends "grain/base.html" %}
+{% load grain_extras %}
+
+{% block content %}
+<h1>{{ object.get_meal_type_display }}</h1>
+<p>{{ object.time|date:"jS F Y" }}<br>
+    <a href="{% url 'grain:calendar' object.time.year object.time.month %}">&laquo; Calendar</a>
+</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Costs ({{ cost_total }})</h3>
+            </div>
+            <div class="panel-body">
+                <p>
+                    <span><em>confirmed</em> {{ object.cost_closed }}</span>
+                    <span class="pull-right"><em>may reduce</em> {{ object.cost_open }}</span>
+                </p>
+                <div class="progress" style="height: 1em;">
+                    <div class="progress-bar progress-bar-success" style="width: {{ cost_pc_closed }}%;"></div>
+                    <div class="progress-bar progress-bar-danger" style="width: {{ cost_pc_open }}%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Dishes</h2>
+{% dish_list object %}
+{% endblock content %}
