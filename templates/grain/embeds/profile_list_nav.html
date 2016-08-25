@@ -1,0 +1,6 @@
+<ul class="dropdown-menu">
+    {% for profile in profiles %}
+    <li><a href="{% url 'grain:profile_select' profile.pk %}">{{ profile.note }} <span class="pull-right">({{ profile.currency }})</span></a></li>
+    {% endfor %}
+    <li><a href="{% url 'grain:profile_list' %}"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> All profiles</a></li>
+</ul>

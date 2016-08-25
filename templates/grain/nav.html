@@ -1,4 +1,5 @@
 {% load radix_extras %}
+{% load grain_extras %}
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -13,7 +14,10 @@
                 <li class="{% nav_active request 'grain:unit_list' %}"><a href="{% url 'grain:unit_list' %}">Units</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url 'grain:profile_list' %}">Profiles</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-pawn" aria-hidden="true"></span> {% get_profile_name request.session.grain_active_user_profile %} <span class="caret"></span></a>
+                    {% get_profile_list request.user %}
+                </li>
             </ul>
         </div>
     </div>

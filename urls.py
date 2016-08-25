@@ -23,19 +23,19 @@ urlpatterns = [
         views.profile_select,
         name="profile_select"),
 
-    url(r'^cal/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/$',
+    url(r'^calendar/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/$',
         views.MealMonthArchive.as_view(month_format='%m'),
         name="calendar"),
 
-    url(r'^meal/(?P<pk>\d+)/$',
+    url(r'^meals/(?P<pk>\d+)/$',
         views.MealDetail.as_view(),
         name="meal_detail"),
 
-    url(r'^meal/create/$',
+    url(r'^meals/create/$',
         views.MealCreate.as_view(),
         name="meal_create"),
 
-    url(r'^dish/create/$',
+    url(r'^dishes/create/$',
         views.DishCreate.as_view(),
         name="dish_create"),
 
@@ -47,27 +47,27 @@ urlpatterns = [
         views.IngredientListFull.as_view(),
         name="inventory_all"),
 
-    url(r'^unit/$',
+    url(r'^units/$',
         views.UnitList.as_view(),
         name="unit_list"),
 
-    url(r'^unit/create/$',
+    url(r'^units/create/$',
         views.UnitCreate.as_view(),
         name="unit_create"),
 
-    url(r'^category/$',
+    url(r'^categories/$',
         views.CategoryList.as_view(),
         name="category_list"),
 
-    url(r'^category/create/$',
+    url(r'^categories/create/$',
         views.CategoryCreate.as_view(),
         name="category_create"),
 
-    url(r'^product/$',
+    url(r'^products/$',
         views.ProductList.as_view(),
         name="product_list"),
 
-    url(r'^product/create/$',
+    url(r'^products/create/$',
         views.ProductCreate.as_view(),
         name="product_create"),
 ]
