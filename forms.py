@@ -11,7 +11,7 @@ class BSDateInput(forms.TextInput):
         output = ['<div class="input-group date datepicker">',
                   super(BSDateInput, self).render(name, value, attrs),
                   '<span class="input-group-addon">',
-                  '<i class="glyphicon glyphicon-calendar"></i></span>']
+                  '<i class="glyphicon glyphicon-calendar"></i></span></div>']
         return mark_safe('\n'.join(output))
 
 
