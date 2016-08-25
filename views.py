@@ -1,14 +1,15 @@
 from datetime import date, timedelta
-from moneyed import Money
 
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views import generic
+from moneyed import Money
 
 from .forms import DishForm, MealForm
-from .models import Dish, IngredientCategory, Meal, Product, Unit, UserProfile
+from .models import (Dish, Ingredient, IngredientCategory, Meal, Product, Unit,
+                     UserProfile)
 
 
 def cal_redirect(request):
@@ -118,6 +119,26 @@ class DishCreate(generic.edit.CreateView):
 
     def get_success_url(self):
         return reverse('grain:meal_detail', args=[self.object.meal.id])
+
+
+class IngredientList(generic.ListView):
+    def get_queryset(self):
+        # TODO: redirect if no profile
+        return Ingredient.objects.filter(exhausted=False,
+            owner__pk=self.request.session['grain_active_user_profile'])
+
+
+class IngredientListFull(generic.ListView):
+    # TODO: consider subclassing with InventoryList
+    def get_queryset(self):
+        # TODO: redirect if no profile
+        return Ingredient.objects.filter(
+            owner__pk=self.request.session['grain_active_user_profile'])
+
+    def get_context_data(self, **kwargs):
+        context = super(IngredientListFull, self).get_context_data(**kwargs)
+        context['full'] = True
+        return context
 
 
 class UnitList(generic.ListView):

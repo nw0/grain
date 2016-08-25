@@ -1,0 +1,35 @@
+{% extends "grain/base.html" %}
+
+{% block content %}
+<h1>Inventory</h1>
+{% if full %}
+<a href="{% url 'grain:inventory' %}" role="button" class="btn btn-link">Current Items</a>
+{% else %}
+<a href="{% url 'grain:inventory_all' %}" role="button" class="btn btn-link">All Items</a>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <th>Product</th>
+                    <th>Amount</th>
+                    <th>Used</th>
+                    <th>Best Before</th>
+                </thead>
+                <tbody>
+                    {% for object in object_list %}
+                    <tr>
+                        <td>{{ object.product }}</td>
+                        <td>{{ object.amount }} {{ object.product.units }}</td>
+                        <td>{{ object.used_amount }}</td>
+                        <td>{{ object.best_before }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

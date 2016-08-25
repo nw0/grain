@@ -39,6 +39,14 @@ urlpatterns = [
         views.DishCreate.as_view(),
         name="dish_create"),
 
+    url(r'^inventory/$',
+        views.IngredientList.as_view(),
+        name="inventory"),
+
+    url(r'^inventory/all/$',
+        views.IngredientListFull.as_view(),
+        name="inventory_all"),
+
     url(r'^unit/$',
         views.UnitList.as_view(),
         name="unit_list"),
