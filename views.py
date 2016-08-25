@@ -9,7 +9,7 @@ from .models import IngredientCategory, Meal, Product, Unit, UserProfile
 
 
 def cal_redirect(request):
-    if not request.session.get('grain:active_user_profile'):
+    if not request.session.get('grain_active_user_profile'):
         return HttpResponseRedirect(reverse('grain:profile_list'))
     return HttpResponseRedirect(reverse('grain:calendar',
                                 kwargs={'year': date.today().strftime("%Y"),
@@ -17,11 +17,12 @@ def cal_redirect(request):
 
 
 class ProfileList(generic.ListView):
-    model = UserProfile
+    def get_queryset(self):
+        return UserProfile.objects.filter(user=self.request.user)
 
 
 def profile_select(request, pk):
-    request.session['grain:active_user_profile'] \
+    request.session['grain_active_user_profile'] \
         = get_object_or_404(UserProfile, pk=pk).pk
     return HttpResponseRedirect(reverse('grain:index'))
 

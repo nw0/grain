@@ -11,6 +11,9 @@
                 <li class="{% nav_active request 'grain:category_list' %}"><a href="{% url 'grain:category_list' %}">Categories</a></li>
                 <li class="{% nav_active request 'grain:unit_list' %}"><a href="{% url 'grain:unit_list' %}">Units</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'grain:profile_list' %}">Profiles</a></li>
+            </ul>
         </div>
     </div>
 </nav>
