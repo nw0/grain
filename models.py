@@ -11,7 +11,7 @@ class UserProfile(models.Model):
 
     A profile will handle ingredients and meals in a single currency.
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     note = models.CharField(max_length=24)
     currency = CurrencyField(default='GBP')
 
