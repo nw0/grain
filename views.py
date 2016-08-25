@@ -21,6 +21,16 @@ class ProfileList(generic.ListView):
         return UserProfile.objects.filter(user=self.request.user)
 
 
+class ProfileCreate(generic.edit.CreateView):
+    model = UserProfile
+    fields = ['note', 'currency']
+    success_url = reverse_lazy('grain:profile_list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(ProfileCreate, self).form_valid(form)
+
+
 def profile_select(request, pk):
     request.session['grain_active_user_profile'] \
         = get_object_or_404(UserProfile, pk=pk).pk

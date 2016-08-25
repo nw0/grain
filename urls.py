@@ -15,6 +15,10 @@ urlpatterns = [
         views.ProfileList.as_view(),
         name="profile_list"),
 
+    url(r'^profiles/create/$',
+        views.ProfileCreate.as_view(),
+        name="profile_create"),
+
     url(r'^profiles/(?P<pk>\d+)/$',
         views.profile_select,
         name="profile_select"),
