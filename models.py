@@ -20,6 +20,16 @@ class UserProfile(models.Model):
         return "%s %s: %s" % (self.user, self.currency, self.note)
 
 
+class Consumer(models.Model):
+    owner = models.ForeignKey(UserProfile)
+    actual_user = models.ForeignKey(User, blank=True, null=True)
+    name = models.CharField(max_length=20)
+
+    @python_2_unicode_compatible
+    def __str__(self):
+        return self.name
+
+
 class Unit(models.Model):
     """Custom unit class for groceries"""
     short = models.CharField("abbreviation", max_length=8)
@@ -97,6 +107,7 @@ class Meal(models.Model):
     meal_type = models.IntegerField(choices=MEAL_CHOICES)
     cost_closed = MoneyField(max_digits=10, decimal_places=4)
     cost_open = MoneyField(max_digits=10, decimal_places=4)
+    consumer = models.ForeignKey(Consumer, blank=True, null=True)
 
     @python_2_unicode_compatible
     def __str__(self):
