@@ -2,15 +2,28 @@ from datetime import date
 
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.views import generic
 
-from .models import IngredientCategory, Meal, Product, Unit
+from .models import IngredientCategory, Meal, Product, Unit, UserProfile
 
 
 def cal_redirect(request):
+    if not request.session.get('grain:active_user_profile'):
+        return HttpResponseRedirect(reverse('grain:profile_list'))
     return HttpResponseRedirect(reverse('grain:calendar',
                                 kwargs={'year': date.today().strftime("%Y"),
                                         'month': date.today().strftime("%m")}))
+
+
+class ProfileList(generic.ListView):
+    model = UserProfile
+
+
+def profile_select(request, pk):
+    request.session['grain:active_user_profile'] \
+        = get_object_or_404(UserProfile, pk=pk).pk
+    return HttpResponseRedirect(reverse('grain:index'))
 
 
 class MealMonthArchive(generic.dates.MonthArchiveView):

@@ -1,0 +1,14 @@
+{% extends "grain/base.html" %}
+{% load grain_extras %}
+
+{% block content %}
+<h1>Profiles <small>Select a profile</small></h1>
+
+<div class="col-md-3">
+    <div class="list-group">
+        {% for profile in object_list %}
+        <a href="{% url 'grain:profile_select' profile.pk %}" class="list-group-item">{{ profile }}</a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

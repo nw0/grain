@@ -11,6 +11,14 @@ urlpatterns = [
         views.cal_redirect,
         name="calendar_redirect"),
 
+    url(r'^profiles/$',
+        views.ProfileList.as_view(),
+        name="profile_list"),
+
+    url(r'^profiles/(?P<pk>\d+)/$',
+        views.profile_select,
+        name="profile_select"),
+
     url(r'^cal/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/$',
         views.MealMonthArchive.as_view(month_format='%m'),
         name="calendar"),
