@@ -7,8 +7,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views import generic
 
-from .forms import MealForm
-from .models import IngredientCategory, Meal, Product, Unit, UserProfile
+from .forms import DishForm, MealForm
+from .models import Dish, IngredientCategory, Meal, Product, Unit, UserProfile
 
 
 def cal_redirect(request):
@@ -75,6 +75,7 @@ class MealDetail(generic.DetailView):
                                             / context['cost_total']
             context['cost_pc_open'] = 100 * self.object.cost_open \
                                           / context['cost_total']
+        context['dish_form'] = DishForm(initial={'meal': self.object})
         return context
 
 
@@ -96,6 +97,27 @@ class MealCreate(generic.edit.CreateView):
 
     def get_success_url(self):
         return reverse('grain:meal_detail', args=[self.object.id])
+
+
+class DishCreate(generic.edit.CreateView):
+    model = Dish
+    form_class = DishForm
+
+    def form_valid(self, form):
+        if not self.request.session.get('grain_active_user_profile'):
+            # FIXME: ValidationError not quite appropriate
+            raise ValidationError("No profile selected", code='invalid')
+        profile = get_object_or_404(UserProfile,
+            pk=self.request.session['grain_active_user_profile'])
+
+        if form.instance.meal.owner != profile:
+            raise ValidationError("Wrong profile", code='invalid')
+        form.instance.cost_closed = Money(0, profile.currency)
+        form.instance.cost_open = Money(0, profile.currency)
+        return super(DishCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('grain:meal_detail', args=[self.object.meal.id])
 
 
 class UnitList(generic.ListView):

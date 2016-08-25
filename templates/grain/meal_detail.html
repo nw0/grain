@@ -1,4 +1,5 @@
 {% extends "grain/base.html" %}
+{% load bootstrap3 %}
 {% load grain_extras %}
 
 {% block content %}
@@ -29,6 +30,20 @@
     </div>
 </div>
 
-<h2>Dishes</h2>
-{% dish_list object %}
+<div class="row">
+    <div class="col-md-9">
+        <h2>Dishes</h2>
+        {% dish_list object %}
+    </div>
+    <div class="col-md-3">
+        <h2>Add dish</h2>
+        <form method="post" action="{% url 'grain:dish_create' %}">
+            {% csrf_token %}
+            {% bootstrap_form dish_form %}
+            {% buttons %}
+            <button type="submit" class="btn btn-primary">Add</button>
+            {% endbuttons %}
+        </form>
+    </div>
+</div>
 {% endblock content %}
