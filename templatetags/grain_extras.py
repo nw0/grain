@@ -1,6 +1,9 @@
 from datetime import date, timedelta
 
 from django import template
+from django.shortcuts import get_object_or_404
+
+from grain.models import UserProfile
 
 register = template.Library()
 BASELINE_MAX = 4    # FIXME: magic: default max meal cost (progress bar)
@@ -54,3 +57,13 @@ def dish_list(meal):
 @register.inclusion_tag('grain/cat_list_li.html')
 def cat_list(categories):
     return {'cats': categories}
+
+
+@register.simple_tag
+def get_profile_name(pk):
+    return get_object_or_404(UserProfile, pk=pk).note
+
+
+@register.inclusion_tag('grain/profile_list_nav.html')
+def get_profile_list(user):
+    return {'profiles': UserProfile.objects.filter(user=user)}
