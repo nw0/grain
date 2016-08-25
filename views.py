@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views import generic
 
+from .forms import MealForm
 from .models import IngredientCategory, Meal, Product, Unit, UserProfile
 
 
@@ -48,10 +49,12 @@ class MealMonthArchive(generic.dates.MonthArchiveView):
     def get_context_data(self, **kwargs):
         context = super(MealMonthArchive, self).get_context_data(**kwargs)
         month = date(int(self.kwargs['year']), int(self.kwargs['month']), 1)
+
         context['object_list'] = Meal.objects.filter(
             owner__pk=self.request.session['grain_active_user_profile'],
             time__gt=(month - timedelta(days=7)),
             time__lt=(month + timedelta(days=38)))
+        context['meal_form'] = MealForm
         return context
 
 
