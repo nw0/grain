@@ -30,4 +30,8 @@ urlpatterns = [
     url(r'^category/$',
         views.CategoryList.as_view(),
         name="category_list"),
+
+    url(r'^category/create/$',
+        views.CategoryCreate.as_view(),
+        name="category_create"),
 ]

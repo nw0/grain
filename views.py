@@ -47,3 +47,10 @@ class UnitCreate(generic.edit.CreateView):
 class CategoryList(generic.ListView):
     queryset = IngredientCategory.objects.filter(parent=None)
     template_name = "grain/category_list.html"
+
+
+class CategoryCreate(generic.edit.CreateView):
+    model = IngredientCategory
+    fields = ['parent', 'name']
+    template_name = "grain/category_form.html"
+    success_url = reverse_lazy('grain:category_list')
