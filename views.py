@@ -38,14 +38,20 @@ def profile_select(request, pk):
 
 
 class MealMonthArchive(generic.dates.MonthArchiveView):
-    queryset = Meal.objects.all()   # FIXME: only show current UserProfile
     date_field = "time"
     allow_future = True
+
+    def get_queryset(self):
+        return Meal.objects.filter(
+            owner__pk=self.request.session['grain_active_user_profile'])
 
 
 class MealDetail(generic.DetailView):
     model = Meal
-    # FIXME: check UserProfile
+
+    def get_queryset(self):
+        return Meal.objects.filter(
+            owner__pk=self.request.session['grain_active_user_profile'])
 
     def get_context_data(self, **kwargs):
         context = super(MealDetail, self).get_context_data(**kwargs)
