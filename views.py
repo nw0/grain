@@ -121,10 +121,19 @@ class CategoryCreate(generic.edit.CreateView):
 
 
 class ProductList(generic.ListView):
-    model = Product
+    def get_queryset(self):
+        if not self.request.session.get('grain_active_user_profile'):
+            # FIXME: ValidationError not quite appropriate
+            raise ValidationError("No profile selected", code='invalid')
+        profile = get_object_or_404(UserProfile,
+            pk=self.request.session['grain_active_user_profile'])
+
+        return Product.objects.filter(price__gt=Money(0, profile.currency))
 
 
 class ProductCreate(generic.edit.CreateView):
     model = Product
     fields = ['category', 'name', 'units', 'amount', 'fixed', 'price']
     success_url = reverse_lazy('grain:product_list')
+
+    # FIXME: only allow adding in profile currency
