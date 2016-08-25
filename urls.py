@@ -18,4 +18,12 @@ urlpatterns = [
     url(r'^meal/(?P<pk>\d+)/$',
         views.MealDetail.as_view(),
         name="meal_detail"),
+
+    url(r'^unit/$',
+        views.UnitList.as_view(),
+        name="unit_list"),
+
+    url(r'^unit/create/$',
+        views.UnitCreate.as_view(),
+        name="unit_create"),
 ]

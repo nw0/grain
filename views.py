@@ -1,10 +1,10 @@
 from datetime import date
 
-from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
 from django.views import generic
 
-from .models import Meal
+from .models import Meal, Unit
 
 
 def cal_redirect(request):
@@ -32,3 +32,13 @@ class MealDetail(generic.DetailView):
             context['cost_pc_open'] = 100 * self.object.cost_open \
                                           / context['cost_total']
         return context
+
+
+class UnitList(generic.ListView):
+    model = Unit
+
+
+class UnitCreate(generic.edit.CreateView):
+    model = Unit
+    fields = ['verbose', 'plural', 'short']
+    success_url = reverse_lazy('grain:unit_list')

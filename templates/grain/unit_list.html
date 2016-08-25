@@ -1,0 +1,24 @@
+{% extends "grain/base.html" %}
+
+{% block content %}
+<h1>Units <a class="btn btn-primary" href="{% url 'grain:unit_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a></h1>
+
+<div class="col-md-4">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <th>Unit</th>
+                <th>Abbr.</th>
+            </thead>
+            <tbody>
+                {% for unit in object_list %}
+                <tr>
+                    <td>{{ unit.verbose }} ({{ unit.plural }})</td>
+                    <td><em>{{ unit.short }}</em></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

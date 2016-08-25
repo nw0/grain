@@ -22,8 +22,8 @@ class UserProfile(models.Model):
 
 class Unit(models.Model):
     """Custom unit class for groceries"""
-    short = models.CharField(max_length=8)
-    verbose = models.CharField(max_length=20)
+    short = models.CharField("abbreviation", max_length=8)
+    verbose = models.CharField("name (singular)", max_length=20)
     plural = models.CharField(max_length=20)
 
     @python_2_unicode_compatible
