@@ -3,10 +3,8 @@
 {% load grain_extras %}
 
 {% block content %}
-<h1>{{ object.get_meal_type_display }}</h1>
-<p>{{ object.time|date:"jS F Y" }}<br>
-    <a href="{% url 'grain:calendar' object.time.year object.time.month %}">&laquo; Calendar</a>
-</p>
+<h1>{{ object.get_meal_type_display }} <small>{{ object.time|date:"jS F Y" }}</small></h1>
+<a href="{% url 'grain:calendar' object.time.year object.time.month %}" role="button" class="btn btn-link">&laquo; Calendar</a>
 
 <div class="row">
     <div class="col-md-4">
@@ -15,27 +13,20 @@
                 <h3 class="panel-title">Costs ({{ cost_total }})</h3>
             </div>
             <div class="panel-body">
+                {% if cost_total %}
                 <p>
                     <span><em>confirmed</em> {{ object.cost_closed }}</span>
                     <span class="pull-right"><em>may reduce</em> {{ object.cost_open }}</span>
                 </p>
-                {% if cost_total %}
                 <div class="progress" style="height: 1em;">
                     <div class="progress-bar progress-bar-success" style="width: {{ cost_pc_closed }}%;"></div>
                     <div class="progress-bar progress-bar-danger" style="width: {{ cost_pc_open }}%;"></div>
                 </div>
+                {% else %}
+                <p>-</p>
                 {% endif %}
             </div>
         </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-9">
-        <h2>Dishes</h2>
-        {% dish_list object %}
-    </div>
-    <div class="col-md-3">
         <h2>Add dish</h2>
         <form method="post" action="{% url 'grain:dish_create' %}">
             {% csrf_token %}
@@ -44,6 +35,10 @@
             <button type="submit" class="btn btn-primary">Add</button>
             {% endbuttons %}
         </form>
+    </div>
+    <div class="col-md-8">
+        <h2>Dishes</h2>
+        {% dish_list object %}
     </div>
 </div>
 {% endblock content %}

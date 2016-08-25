@@ -24,6 +24,16 @@ $(document).ready(function() {
 <h1>Calendar</h1>
 
 <div class="row">
+    <div class="col-md-2">
+        <h3>Add Meal</h3>
+        <form method="post" action="{% url 'grain:meal_create' %}">
+            {% csrf_token %}
+            {% bootstrap_form meal_form %}
+            {% buttons %}
+            <button type="submit" class="btn btn-primary">Add</button>
+            {% endbuttons %}
+        </form>
+    </div>
     <div class="col-md-10">
         <h3>{{ month|date:"F Y" }}
             <span class="pull-right">
@@ -38,16 +48,6 @@ $(document).ready(function() {
             </span>
         </h3>
         {% calendar month object_list %}
-    </div>
-    <div class="col-md-2">
-        <h3>Add Meal</h3>
-        <form method="post" action="{% url 'grain:meal_create' %}">
-            {% csrf_token %}
-            {% bootstrap_form meal_form %}
-            {% buttons %}
-            <button type="submit" class="btn btn-primary">Add</button>
-            {% endbuttons %}
-        </form>
     </div>
 </div>
 {% endblock content %}

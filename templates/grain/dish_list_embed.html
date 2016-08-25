@@ -4,6 +4,7 @@
             <th>Dish</th>
             <th>Closed</th>
             <th>Open</th>
+            <th>Ingredients</th>
         </thead>
         <tbody>
             {% for dish in dishes %}
@@ -11,6 +12,7 @@
                 <td>{{ dish }}</td>
                 <td>{{ dish.cost_closed }}</td>
                 <td>{{ dish.cost_open }}</td>
+                <td></td>
             </tr>
             {% endfor %}
         </tbody>
