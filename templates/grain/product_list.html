@@ -1,0 +1,32 @@
+{% extends "grain/base.html" %}
+
+{% block content %}
+<h1>Products</h1>
+
+<div class="col-md-8">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <th>Category</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Usual Price</th>
+            </thead>
+            <tbody>
+                {% for product in object_list %}
+                <tr>
+                    <td>{{ product.category }}</td>
+                    <td>{{ product.name }}</td>
+                    {% if product.fixed %}
+                    <td>{{ product.amount }} {{ product.units }}</td>
+                    <td>{{ product.price }}</td>
+                    {% else %}
+                    <td colspan="2">{{ product.amount }} {{ product.units }} for {{ product.price }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

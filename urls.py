@@ -34,4 +34,8 @@ urlpatterns = [
     url(r'^category/create/$',
         views.CategoryCreate.as_view(),
         name="category_create"),
+
+    url(r'^product/$',
+        views.ProductList.as_view(),
+        name="product_list"),
 ]

@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.views import generic
 
-from .models import IngredientCategory, Meal, Unit
+from .models import IngredientCategory, Meal, Product, Unit
 
 
 def cal_redirect(request):
@@ -54,3 +54,7 @@ class CategoryCreate(generic.edit.CreateView):
     fields = ['parent', 'name']
     template_name = "grain/category_form.html"
     success_url = reverse_lazy('grain:category_list')
+
+
+class ProductList(generic.ListView):
+    model = Product
