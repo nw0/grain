@@ -58,3 +58,9 @@ class CategoryCreate(generic.edit.CreateView):
 
 class ProductList(generic.ListView):
     model = Product
+
+
+class ProductCreate(generic.edit.CreateView):
+    model = Product
+    fields = ['category', 'name', 'units', 'amount', 'fixed', 'price']
+    success_url = reverse_lazy('grain:product_list')
