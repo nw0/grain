@@ -1,5 +1,7 @@
 from datetime import date, timedelta
+from moneyed import Money
 
+from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -74,6 +76,26 @@ class MealDetail(generic.DetailView):
             context['cost_pc_open'] = 100 * self.object.cost_open \
                                           / context['cost_total']
         return context
+
+
+class MealCreate(generic.edit.CreateView):
+    model = Meal
+    form_class = MealForm
+
+    def form_valid(self, form):
+        if not self.request.session.get('grain_active_user_profile'):
+            # FIXME: ValidationError not quite appropriate
+            raise ValidationError("No profile selected", code='invalid')
+        profile = get_object_or_404(UserProfile,
+            pk=self.request.session['grain_active_user_profile'])
+
+        form.instance.owner = profile
+        form.instance.cost_closed = Money(0, profile.currency)
+        form.instance.cost_open = Money(0, profile.currency)
+        return super(MealCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('grain:meal_detail', args=[self.object.id])
 
 
 class UnitList(generic.ListView):

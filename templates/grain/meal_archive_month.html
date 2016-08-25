@@ -41,7 +41,7 @@ $(document).ready(function() {
     </div>
     <div class="col-md-2">
         <h3>Add Meal</h3>
-        <form method="post" action="#">
+        <form method="post" action="{% url 'grain:meal_create' %}">
             {% csrf_token %}
             {% bootstrap_form meal_form %}
             {% buttons %}
