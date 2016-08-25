@@ -26,4 +26,8 @@ urlpatterns = [
     url(r'^unit/create/$',
         views.UnitCreate.as_view(),
         name="unit_create"),
+
+    url(r'^category/$',
+        views.CategoryList.as_view(),
+        name="category_list"),
 ]

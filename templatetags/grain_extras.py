@@ -49,3 +49,8 @@ def cal_cell(cell):
 @register.inclusion_tag('grain/dish_list_embed.html')
 def dish_list(meal):
     return {'dishes': meal.dish_set.all}
+
+
+@register.inclusion_tag('grain/cat_list_li.html')
+def cat_list(categories):
+    return {'cats': categories}

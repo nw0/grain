@@ -7,6 +7,7 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="{% nav_active request 'grain:index' %}"><a href="{% url 'grain:index' %}">Home</a></li>
+                <li class="{% nav_active request 'grain:category_list' %}"><a href="{% url 'grain:category_list' %}">Categories</a></li>
                 <li class="{% nav_active request 'grain:unit_list' %}"><a href="{% url 'grain:unit_list' %}">Units</a></li>
             </ul>
         </div>
