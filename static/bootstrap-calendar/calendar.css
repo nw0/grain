@@ -197,6 +197,9 @@ span[data-cal-date] {
   opacity: 0.5;
   cursor: default;
 }
+.cal-day-outmonth {
+  opacity: 0.9;
+}
 .cal-day-weekend span[data-cal-date] {
   color: darkred;
 }

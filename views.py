@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
@@ -39,11 +39,20 @@ def profile_select(request, pk):
 
 class MealMonthArchive(generic.dates.MonthArchiveView):
     date_field = "time"
-    allow_future = True
+    allow_empty, allow_future = True, True
 
     def get_queryset(self):
         return Meal.objects.filter(
             owner__pk=self.request.session['grain_active_user_profile'])
+
+    def get_context_data(self, **kwargs):
+        context = super(MealMonthArchive, self).get_context_data(**kwargs)
+        month = date(int(self.kwargs['year']), int(self.kwargs['month']), 1)
+        context['object_list'] = Meal.objects.filter(
+            owner__pk=self.request.session['grain_active_user_profile'],
+            time__gt=(month - timedelta(days=7)),
+            time__lt=(month + timedelta(days=38)))
+        return context
 
 
 class MealDetail(generic.DetailView):
