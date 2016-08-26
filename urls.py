@@ -67,6 +67,10 @@ urlpatterns = [
         views.ProductList.as_view(),
         name="product_list"),
 
+    url(r'^products/raw/(?P<pk>\d+)/$',
+        views.product_raw,
+        name="product_raw"),
+
     url(r'^products/create/$',
         views.ProductCreate.as_view(),
         name="product_create"),

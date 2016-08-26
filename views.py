@@ -1,8 +1,9 @@
+import json
 from datetime import date, timedelta
 
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from moneyed import Money
@@ -192,6 +193,25 @@ class ProductList(generic.ListView):
             pk=self.request.session['grain_active_user_profile'])
 
         return Product.objects.filter(price__gt=Money(0, profile.currency))
+
+
+def product_raw(request, pk):
+    if not request.session.get('grain_active_user_profile'):
+        # FIXME: ValidationError not quite appropriate
+        raise ValidationError("No profile selected", code='invalid')
+    profile = get_object_or_404(UserProfile,
+        pk=request.session['grain_active_user_profile'])
+
+    prod = get_object_or_404(Product, pk=pk,
+                             price__gt=Money(0, profile.currency))
+    prod_dict = {
+        'name': prod.name,
+        'usual_price': float(prod.price.amount),
+        'amount': prod.amount,
+        'units': prod.units.pk,
+        'fixed': prod.fixed,
+    }
+    return HttpResponse(json.dumps(prod_dict))
 
 
 class ProductCreate(generic.edit.CreateView):
