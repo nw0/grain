@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.views import generic
 from moneyed import Money
 
-from .forms import DishForm, MealForm
+from .forms import DishForm, IngredientForm, MealForm
 from .models import (Dish, Ingredient, IngredientCategory, Meal, Product, Unit,
                      UserProfile)
 
@@ -127,6 +127,18 @@ class IngredientList(generic.ListView):
         return Ingredient.objects.filter(exhausted=False,
             owner__pk=self.request.session['grain_active_user_profile'])
 
+    def get_context_data(self, **kwargs):
+        if not self.request.session.get('grain_active_user_profile'):
+            # FIXME: ValidationError not quite appropriate
+            raise ValidationError("No profile selected", code='invalid')
+        profile = get_object_or_404(UserProfile,
+            pk=self.request.session['grain_active_user_profile'])
+
+        context = super(IngredientList, self).get_context_data(**kwargs)
+        context['ingredient_form'] = \
+            IngredientForm(initial={'price': Money(0, profile.currency)})
+        return context
+
 
 class IngredientListFull(generic.ListView):
     # TODO: consider subclassing with InventoryList
@@ -136,8 +148,16 @@ class IngredientListFull(generic.ListView):
             owner__pk=self.request.session['grain_active_user_profile'])
 
     def get_context_data(self, **kwargs):
+        if not self.request.session.get('grain_active_user_profile'):
+            # FIXME: ValidationError not quite appropriate
+            raise ValidationError("No profile selected", code='invalid')
+        profile = get_object_or_404(UserProfile,
+            pk=self.request.session['grain_active_user_profile'])
+
         context = super(IngredientListFull, self).get_context_data(**kwargs)
         context['full'] = True
+        context['ingredient_form'] = \
+            IngredientForm(initial={'price': Money(0, profile.currency)})
         return context
 
 

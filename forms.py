@@ -3,7 +3,7 @@ import datetime
 from django import forms
 from django.utils.safestring import mark_safe
 
-from .models import Dish, Meal
+from .models import Dish, Ingredient, Meal
 
 
 class BSDateInput(forms.TextInput):
@@ -23,6 +23,7 @@ class MealForm(forms.ModelForm):
         model = Meal
         fields = ['time', 'meal_type', 'consumer']
 
+
 class DishForm(forms.ModelForm):
     meal = forms.ModelChoiceField(widget=forms.HiddenInput(),
                                   queryset=Meal.objects.all())
@@ -30,3 +31,10 @@ class DishForm(forms.ModelForm):
     class Meta:
         model = Dish
         fields = ['method', 'meal']
+
+
+class IngredientForm(forms.ModelForm):
+    class Meta:
+        model = Ingredient
+        fields = ['product', 'price', 'amount', 'best_before', 'expiry_type',
+                  'purchase_date']

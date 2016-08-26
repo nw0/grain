@@ -1,4 +1,5 @@
 {% extends "grain/base.html" %}
+{% load bootstrap3 %}
 
 {% block content %}
 <h1>Inventory</h1>
@@ -9,7 +10,19 @@
 {% endif %}
 
 <div class="row">
+    <div class="col-md-3">
+        <h2>Add item</h2>
+        <form method="post" action="#">
+            {% csrf_token %}
+            {% bootstrap_form ingredient_form %}
+            {% buttons %}
+            <button type="submit" class="btn btn-primary">Create</button>
+            {% endbuttons %}
+        </form>
+    </div>
+
     <div class="col-md-9">
+        <h2>Items</h2>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
