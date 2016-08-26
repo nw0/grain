@@ -13,9 +13,13 @@
                 <th>Usual Price</th>
             </thead>
             <tbody>
-                {% for product in object_list %}
+                {% for product in object_list|dictsort:"category.get_parent_name_list" %}
                 <tr>
-                    <td>{{ product.category }}</td>
+                    <td style="font-size: 0.85em;">
+                        {% for cat in product.category.get_parent_name_list %}
+                        {{ cat }}{% if not forloop.last %} &raquo;{% endif %}
+                        {% endfor %}
+                    </td>
                     <td>{{ product.name }}</td>
                     {% if product.fixed %}
                     <td>{{ product.amount }} {{ product.units }}</td>

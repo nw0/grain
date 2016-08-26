@@ -46,6 +46,11 @@ class IngredientCategory(models.Model):
     parent = models.ForeignKey('self', default=None, blank=True, null=True)
     name = models.CharField(max_length=40)
 
+    def get_parent_name_list(self):
+        li = self.parent.get_parent_name_list() if self.parent else []
+        li.append(self.name)
+        return li
+
     class Meta:
         verbose_name_plural = "ingredient categories"
 
