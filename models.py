@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from djmoney.models.fields import CurrencyField, MoneyField
+from moneyed import Money
 
 
 class UserProfile(models.Model):
@@ -150,10 +151,10 @@ class Dish(models.Model):
     cost_open = MoneyField(max_digits=10, decimal_places=4)
 
     def costs_open_change(self, delta):
-        self.costs_open += delta
+        self.cost_open += delta
         self.save()
 
-        self.meal.costs_open += delta
+        self.meal.cost_open += delta
         self.meal.save()
 
     def costs_close(self, delta):
@@ -162,7 +163,7 @@ class Dish(models.Model):
         self.save()
 
         self.meal.costs_closed += delta
-        self.meal.costs_open -= delta
+        self.meal.cost_open -= delta
         self.meal.save()
 
     def get_ticket_form(self):
@@ -181,14 +182,15 @@ class Dish(models.Model):
 
 
 class TicketManager(models.Manager):
-    def create_ticket(self, ingredient, used_on_ticket, dish, exhausted=False):
+    def create_ticket(self, ingredient, used_on_ticket, dish, currency,
+                      exhausted=False):
         assert used_on_ticket > 0, "Must use positive quantity"
         assert not ingredient.exhausted, "Ingredient must not be exhausted"
 
         ticket = self.create(ingredient=ingredient,used=used_on_ticket,
-                             dish=dish, cost=0)
+                             dish=dish, cost=Money(0, currency))
         ticket.save()
-        ticket.update_cost(ingredient.update_usage(used_on_ticket))
+        ingredient.update_usage(used_on_ticket)
         if exhausted:
             ingredient.set_exhausted(True)
         return ticket

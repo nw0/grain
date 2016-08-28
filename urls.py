@@ -83,4 +83,8 @@ urlpatterns = [
     url(r'^products/create/$',
         views.ProductCreate.as_view(),
         name="product_create"),
+
+    url(r'^ticket/create/$',
+        views.ticket_create,
+        name="ticket_create"),
 ]

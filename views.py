@@ -8,9 +8,9 @@ from django.shortcuts import get_object_or_404
 from django.views import generic
 from moneyed import Money
 
-from .forms import DishForm, IngredientForm, MealForm
-from .models import (Dish, Ingredient, IngredientCategory, Meal, Product, Unit,
-                     UserProfile)
+from .forms import DishForm, IngredientForm, MealForm, TicketForm
+from .models import (Dish, Ingredient, IngredientCategory, Meal, Product,
+                     Ticket, Unit, UserProfile)
 
 
 def cal_redirect(request):
@@ -239,3 +239,23 @@ class ProductCreate(generic.edit.CreateView):
     success_url = reverse_lazy('grain:product_list')
 
     # FIXME: only allow adding in profile currency
+
+
+def ticket_create(request):
+    form = TicketForm(request.POST)
+    if not form.is_valid():
+        raise ValidationError("Invalid form", code='invalid')
+    if not request.session.get('grain_active_user_profile'):
+        # FIXME: ValidationError not quite appropriate
+        raise ValidationError("No profile selected", code='invalid')
+    profile = get_object_or_404(UserProfile,
+        pk=request.session['grain_active_user_profile'])
+
+    ticket = Ticket.objects.create_ticket(
+        form.cleaned_data['ingredient'],
+        form.cleaned_data['units_used'],
+        form.cleaned_data['dish'],
+        profile.currency,
+        form.cleaned_data['exhausted'],
+    )
+    return HttpResponseRedirect(reverse("grain:meal_detail", args=[form.cleaned_data['dish'].meal.pk]))
