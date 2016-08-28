@@ -91,6 +91,15 @@ class Ingredient(models.Model):
     purchase_date = models.DateField(default=date.today)
     exhausted = models.BooleanField(default=False)
 
+    def update_usage(self, delta):
+        assert not self.exhausted, "Ingredient has been exhausted"
+
+        self.used_amount += delta
+        affected_tickets = self.ticket_set.all()
+        for ticket in affected_tickets:
+            ticket.update_cost(self.price / self.used_amount)
+        self.save()
+
     @python_2_unicode_compatible
     def __str__(self):
         return "%s" % self.product
@@ -134,6 +143,22 @@ class Dish(models.Model):
     cost_closed = MoneyField(max_digits=10, decimal_places=4)
     cost_open = MoneyField(max_digits=10, decimal_places=4)
 
+    def costs_open_change(self, delta):
+        self.costs_open += delta
+        self.save()
+
+        self.meal.costs_open += delta
+        self.meal.save()
+
+    def costs_close(self, delta):
+        self.cost_closed += delta
+        self.cost_open -= delta
+        self.save()
+
+        self.meal.costs_closed += delta
+        self.meal.costs_open -= delta
+        self.meal.save()
+
     class Meta:
         verbose_name_plural = "dishes"
 
@@ -152,6 +177,13 @@ class Ticket(models.Model):
     cost = MoneyField(max_digits=10, decimal_places=4)
     final = models.BooleanField(default=False)
     dish = models.ForeignKey(Dish)
+
+    def update_cost(self, cost_per_unit):
+        assert not self.final, "Cannot modify finalised tickets"
+        new_cost = self.used * cost_per_unit
+        self.dish.costs_open_change(new_cost - self.cost)
+        self.cost = new_cost
+        self.save()
 
     @python_2_unicode_compatible
     def __str__(self):
