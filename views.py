@@ -78,6 +78,7 @@ class MealDetail(generic.DetailView):
             context['cost_pc_open'] = 100 * self.object.cost_open \
                                           / context['cost_total']
         context['dish_form'] = DishForm(initial={'meal': self.object})
+        context['choices'] = Dish.COOKING_STYLES
         return context
 
 
@@ -116,6 +117,12 @@ class DishCreate(generic.edit.CreateView):
             raise ValidationError("Wrong profile", code='invalid')
         form.instance.cost_closed = Money(0, profile.currency)
         form.instance.cost_open = Money(0, profile.currency)
+        for datum in form.data:
+            if '_choice_' in datum:
+                form.instance.method = datum[8:]
+                break
+        if form.instance.method not in [k for k, v in Dish.COOKING_STYLES]:
+            raise ValidationError("Invalid cooking style", code='invalid')
         return super(DishCreate, self).form_valid(form)
 
     def get_success_url(self):

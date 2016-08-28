@@ -32,7 +32,11 @@
             {% csrf_token %}
             {% bootstrap_form dish_form %}
             {% buttons %}
-            <button type="submit" class="btn btn-primary">Add</button>
+            <div class="btn-group" role="group">
+                {% for choice in choices %}
+                <button type="submit" class="btn btn-default" name="_choice_{{ choice.0 }}">{{ choice.1 }}</button>
+                {% endfor %}
+            </div>
             {% endbuttons %}
         </form>
     </div>

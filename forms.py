@@ -30,7 +30,7 @@ class DishForm(forms.ModelForm):
 
     class Meta:
         model = Dish
-        fields = ['method', 'meal']
+        fields = ['meal']
 
 
 class IngredientForm(forms.ModelForm):
