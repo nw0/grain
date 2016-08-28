@@ -122,27 +122,7 @@ class DishCreate(generic.edit.CreateView):
         return reverse('grain:meal_detail', args=[self.object.meal.id])
 
 
-class IngredientList(generic.ListView):
-    def get_queryset(self):
-        # TODO: redirect if no profile
-        return Ingredient.objects.filter(exhausted=False,
-            owner__pk=self.request.session['grain_active_user_profile'])
-
-    def get_context_data(self, **kwargs):
-        if not self.request.session.get('grain_active_user_profile'):
-            # FIXME: ValidationError not quite appropriate
-            raise ValidationError("No profile selected", code='invalid')
-        profile = get_object_or_404(UserProfile,
-            pk=self.request.session['grain_active_user_profile'])
-
-        context = super(IngredientList, self).get_context_data(**kwargs)
-        context['ingredient_form'] = \
-            IngredientForm(initial={'price': Money(0, profile.currency)})
-        return context
-
-
 class IngredientListFull(generic.ListView):
-    # TODO: consider subclassing with InventoryList
     def get_queryset(self):
         # TODO: redirect if no profile
         return Ingredient.objects.filter(
@@ -156,9 +136,20 @@ class IngredientListFull(generic.ListView):
             pk=self.request.session['grain_active_user_profile'])
 
         context = super(IngredientListFull, self).get_context_data(**kwargs)
-        context['full'] = True
+        context['full'] = self.__class__ == IngredientListFull
         context['ingredient_form'] = \
             IngredientForm(initial={'price': Money(0, profile.currency)})
+        return context
+
+
+class IngredientList(IngredientListFull):
+    def get_queryset(self):
+        return super(IngredientList, self).get_queryset()\
+                                          .filter(exhausted=False)
+
+    def get_context_data(self, **kwargs):
+        context = super(IngredientList, self).get_context_data(**kwargs)
+        context['full'] = False
         return context
 
 
