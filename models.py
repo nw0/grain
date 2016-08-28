@@ -99,6 +99,12 @@ class Ingredient(models.Model):
         for ticket in affected_tickets:
             ticket.update_cost(self.price / self.used_amount)
         self.save()
+        return self.price / self.used_amount
+
+    def set_exhausted(self, exhausted):
+        assert False, "Not implemented"
+        # TODO
+        pass
 
     @python_2_unicode_compatible
     def __str__(self):
@@ -170,8 +176,24 @@ class Dish(models.Model):
         return "%s %s" % (self.get_method_display(), tickets[0])
 
 
+class TicketManager(models.Manager):
+    def create_ticket(self, ingredient, used_on_ticket, dish, exhausted=False):
+        assert used_on_ticket > 0, "Must use positive quantity"
+        assert not ingredient.exhausted, "Ingredient must not be exhausted"
+
+        ticket = self.create(ingredient=ingredient,used=used_on_ticket,
+                             dish=dish, cost=0)
+        ticket.save()
+        ticket.update_cost(ingredient.update_usage(used_on_ticket))
+        if exhausted:
+            ingredient.set_exhausted(True)
+        return ticket
+
+
 class Ticket(models.Model):
     # FIXME: include docstring
+    objects = TicketManager()
+
     ingredient = models.ForeignKey(Ingredient)
     used = models.FloatField()
     cost = MoneyField(max_digits=10, decimal_places=4)
