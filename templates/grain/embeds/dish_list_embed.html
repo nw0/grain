@@ -1,3 +1,4 @@
+{% load bootstrap3 %}
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
@@ -12,7 +13,30 @@
                 <td>{{ dish }}</td>
                 <td>{{ dish.cost_closed }}</td>
                 <td>{{ dish.cost_open }}</td>
-                <td></td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Add</button>
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Add Ingredient</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        {% bootstrap_form dish.get_ticket_form %}
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    {% buttons %}
+                                    <button type="button" class="btn btn-primary">Add ingredient</button>
+                                    {% endbuttons %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

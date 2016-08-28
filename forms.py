@@ -3,7 +3,7 @@ import datetime
 from django import forms
 from django.utils.safestring import mark_safe
 
-from .models import Dish, Ingredient, Meal, Product
+from .models import Dish, Ingredient, Meal
 
 
 class BSDateInput(forms.TextInput):
@@ -41,7 +41,16 @@ class IngredientForm(forms.ModelForm):
     best_before = forms.DateField(label="Best before", widget=BSDateInput())
     purchase_date = forms.DateField(label="Purchased on", widget=BSDateInput(),
                                     initial=datetime.date.today)
+
     class Meta:
         model = Ingredient
         fields = ['product', 'price', 'amount', 'best_before', 'expiry_type',
                   'purchase_date']
+
+
+class TicketForm(forms.Form):
+    dish = forms.ModelChoiceField(widget=forms.HiddenInput(),
+                                  queryset=Dish.objects.all())
+    ingredient = forms.ModelChoiceField(queryset=Ingredient.objects.all())
+    units_used = forms.FloatField()
+    exhausted = forms.BooleanField(required=False)
