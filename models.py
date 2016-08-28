@@ -103,9 +103,11 @@ class Ingredient(models.Model):
         return self.price / self.used_amount
 
     def set_exhausted(self, exhausted):
-        assert False, "Not implemented"
-        # TODO
-        pass
+        if exhausted != self.exhausted:
+            for ticket in self.ticket_set.all():
+                ticket.set_final(exhausted)
+            self.exhausted = exhausted
+            self.save()
 
     @python_2_unicode_compatible
     def __str__(self):
@@ -162,7 +164,7 @@ class Dish(models.Model):
         self.cost_open -= delta
         self.save()
 
-        self.meal.costs_closed += delta
+        self.meal.cost_closed += delta
         self.meal.cost_open -= delta
         self.meal.save()
 
@@ -212,6 +214,15 @@ class Ticket(models.Model):
         self.dish.costs_open_change(new_cost - self.cost)
         self.cost = new_cost
         self.save()
+
+    def set_final(self, final):
+        if final != self.final:
+            if final:
+                self.dish.costs_close(self.cost)
+            else:
+                self.dish.costs_close(-self.cost)
+            self.final = final
+            self.save()
 
     @python_2_unicode_compatible
     def __str__(self):
