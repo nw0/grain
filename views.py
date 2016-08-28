@@ -162,6 +162,27 @@ class IngredientListFull(generic.ListView):
         return context
 
 
+class IngredientCreate(generic.edit.CreateView):
+    model = Ingredient
+    form_class = IngredientForm
+    success_url = reverse_lazy('grain:inventory')
+    template_name = "grain/generic_form.html"
+
+    def form_valid(self, form):
+        if not self.request.session.get('grain_active_user_profile'):
+            # FIXME: ValidationError not quite appropriate
+            raise ValidationError("No profile selected", code='invalid')
+        profile = get_object_or_404(UserProfile,
+            pk=self.request.session['grain_active_user_profile'])
+
+        if form.instance.price.currency.code != profile.currency:
+            raise ValidationError("Must use same currency as profile")
+        form.instance.owner = profile
+        if form.instance.product.fixed:
+            form.instance.amount = form.instance.product.amount
+        return super(IngredientCreate, self).form_valid(form)
+
+
 class UnitList(generic.ListView):
     model = Unit
 
@@ -206,9 +227,9 @@ def product_raw(request, pk):
                              price__gt=Money(0, profile.currency))
     prod_dict = {
         'name': prod.name,
-        'usual_price': float(prod.price.amount),
+        'usual_price': str(prod.price.amount),
         'amount': prod.amount,
-        'units': prod.units.pk,
+        'units': prod.units.short,
         'fixed': prod.fixed,
     }
     return HttpResponse(json.dumps(prod_dict))

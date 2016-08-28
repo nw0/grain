@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.views.defaults import page_not_found
 
 from . import views
 
@@ -47,6 +48,10 @@ urlpatterns = [
         views.IngredientListFull.as_view(),
         name="inventory_all"),
 
+    url(r'^ingredient/create/$',
+        views.IngredientCreate.as_view(),
+        name="ingredient_create"),
+
     url(r'^units/$',
         views.UnitList.as_view(),
         name="unit_list"),
@@ -70,6 +75,10 @@ urlpatterns = [
     url(r'^products/raw/(?P<pk>\d+)/$',
         views.product_raw,
         name="product_raw"),
+
+    url(r'^products/raw/$',
+        page_not_found, # FIXME
+        name="product_raw_noid"),
 
     url(r'^products/create/$',
         views.ProductCreate.as_view(),
