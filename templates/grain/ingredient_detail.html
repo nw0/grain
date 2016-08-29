@@ -1,0 +1,60 @@
+{% extends "grain/base.html" %}
+{% load bootstrap3 %}
+{% load grain_extras %}
+
+{% block content %}
+<h1>{{ object }}{% if object.exhausted %} <small>(exhausted)</small>{% endif %}</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Info</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td>Price</td>
+                        <td>{{ object.price }}</td>
+                    </tr>
+                    <tr>
+                        <td>Original amount</td>
+                        <td>{{ object.amount }} {{ object.product.units}}</td>
+                    </tr>
+                    <tr>
+                        <td>Units used</td>
+                        <td>{{ object.used_amount }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ object.get_expiry_type_display|capfirst }}</td>
+                        <td>{{ object.best_before }}</td>
+                    </tr>
+                    <tr>
+                        <td>Purchased on</td>
+                        <td>{{ object.purchase_date }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h2>Tickets</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <th>Dish</th>
+                    <th>Amount</th>
+                    <th>Cost</th>
+                </thead>
+                <tbody>
+                    {% for ticket in object.ticket_set.all %}
+                    <tr>
+                        <td>{{ ticket.dish.meal }}: {{ ticket.dish.get_method_display}}</td>
+                        <td>{{ ticket.used }}</td>
+                        <td>{{ ticket.cost }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

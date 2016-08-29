@@ -48,6 +48,10 @@ urlpatterns = [
         views.IngredientListFull.as_view(),
         name="inventory_all"),
 
+    url(r'^ingredients/(?P<pk>\d+)/$',
+        views.IngredientDetail.as_view(),
+        name="ingredient_detail"),
+
     url(r'^ingredient/create/$',
         views.IngredientCreate.as_view(),
         name="ingredient_create"),

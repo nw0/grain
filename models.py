@@ -136,7 +136,7 @@ class Meal(models.Model):
 
     @python_2_unicode_compatible
     def __str__(self):
-        return "%s on %s" % (self.get_meal_type_display(), self.time)
+        return "%s on %s" % (self.get_meal_type_display(), self.time.strftime("%F"))
 
 
 class Dish(models.Model):

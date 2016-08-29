@@ -155,6 +155,14 @@ class IngredientList(IngredientListFull):
         return context
 
 
+class IngredientDetail(generic.DetailView):
+    model = Ingredient
+
+    def get_queryset(self):
+        return Ingredient.objects.filter(
+            owner__pk=self.request.session['grain_active_user_profile'])
+
+
 class IngredientCreate(generic.edit.CreateView):
     model = Ingredient
     form_class = IngredientForm
