@@ -242,14 +242,15 @@ class ProductCreate(generic.edit.CreateView):
 
 
 def ticket_create(request):
-    form = TicketForm(request.POST)
-    if not form.is_valid():
-        raise ValidationError("Invalid form", code='invalid')
     if not request.session.get('grain_active_user_profile'):
         # FIXME: ValidationError not quite appropriate
         raise ValidationError("No profile selected", code='invalid')
     profile = get_object_or_404(UserProfile,
         pk=request.session['grain_active_user_profile'])
+
+    form = TicketForm(profile.pk, request.POST)
+    if not form.is_valid():
+        raise ValidationError("Invalid form", code='invalid')
 
     ticket = Ticket.objects.create_ticket(
         form.cleaned_data['ingredient'],

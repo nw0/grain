@@ -53,7 +53,6 @@ class TicketForm(forms.Form):
                                   queryset=Dish.objects.all())
     ingredient = forms.ModelChoiceField(
         queryset=Ingredient.objects.filter(exhausted=False))
-    # FIXME: filter by profile too!
     units_used = forms.FloatField()
     exhausted = forms.BooleanField(required=False)
 
