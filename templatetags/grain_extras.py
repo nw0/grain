@@ -50,8 +50,8 @@ def cal_cell(cell):
 
 
 @register.inclusion_tag('grain/embeds/dish_list_embed.html')
-def dish_list(meal):
-    return {'dishes': meal.dish_set.all}
+def dish_list(request, meal):
+    return {'dishes': meal.dish_set.all, 'request': request}
 
 
 @register.inclusion_tag('grain/embeds/cat_list_li.html')
@@ -67,3 +67,9 @@ def get_profile_name(pk):
 @register.inclusion_tag('grain/embeds/profile_list_nav.html')
 def get_profile_list(user):
     return {'profiles': UserProfile.objects.filter(user=user)}
+
+
+@register.inclusion_tag('grain/embeds/ingredient_form_embed.html')
+def ingredient_form_bootstrap(request, dish):
+    return {'form':
+        dish.get_ticket_form(request.session.get('grain_active_user_profile'))}

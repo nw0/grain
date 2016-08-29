@@ -56,3 +56,9 @@ class TicketForm(forms.Form):
     # FIXME: filter by profile too!
     units_used = forms.FloatField()
     exhausted = forms.BooleanField(required=False)
+
+    def __init__(self, profile_pk=None, *args, **kwargs):
+        super(TicketForm, self).__init__(*args, **kwargs)
+        self.fields['ingredient'].queryset = Ingredient.objects.filter(
+            exhausted=False, owner__pk=profile_pk
+        )

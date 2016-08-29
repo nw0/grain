@@ -168,9 +168,9 @@ class Dish(models.Model):
         self.meal.cost_open -= delta
         self.meal.save()
 
-    def get_ticket_form(self):
+    def get_ticket_form(self, profile_pk=None):
         from .forms import TicketForm
-        return TicketForm(initial={'dish': self})
+        return TicketForm(profile_pk, initial={'dish': self})
 
     class Meta:
         verbose_name_plural = "dishes"
