@@ -61,3 +61,5 @@ class TicketForm(forms.Form):
         self.fields['ingredient'].queryset = Ingredient.objects.filter(
             exhausted=False, owner__pk=profile_pk
         )
+        self.fields['dish'].queryset = Dish.objects.filter(
+            meal__owner__pk=profile_pk)
