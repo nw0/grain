@@ -13,6 +13,13 @@ from .models import (Dish, Ingredient, IngredientCategory, Meal, Product,
                      Ticket, Unit, UserProfile)
 
 
+def get_profile(session):
+    if not session.get('grain_active_user_profile'):
+        # FIXME: ValidationError not quite appropriate
+        raise ValidationError("No profile selected", code='invalid')
+    return get_object_or_404(UserProfile,
+                             pk=session['grain_active_user_profile'])
+
 def cal_redirect(request):
     if not request.session.get('grain_active_user_profile'):
         return HttpResponseRedirect(reverse('grain:profile_list'))
@@ -87,11 +94,7 @@ class MealCreate(generic.edit.CreateView):
     form_class = MealForm
 
     def form_valid(self, form):
-        if not self.request.session.get('grain_active_user_profile'):
-            # FIXME: ValidationError not quite appropriate
-            raise ValidationError("No profile selected", code='invalid')
-        profile = get_object_or_404(UserProfile,
-            pk=self.request.session['grain_active_user_profile'])
+        profile = get_profile(self.request.session)
 
         form.instance.owner = profile
         form.instance.cost_closed = Money(0, profile.currency)
@@ -107,11 +110,7 @@ class DishCreate(generic.edit.CreateView):
     form_class = DishForm
 
     def form_valid(self, form):
-        if not self.request.session.get('grain_active_user_profile'):
-            # FIXME: ValidationError not quite appropriate
-            raise ValidationError("No profile selected", code='invalid')
-        profile = get_object_or_404(UserProfile,
-            pk=self.request.session['grain_active_user_profile'])
+        profile = get_profile(self.request.session)
 
         if form.instance.meal.owner != profile:
             raise ValidationError("Wrong profile", code='invalid')
@@ -136,11 +135,7 @@ class IngredientListFull(generic.ListView):
             owner__pk=self.request.session['grain_active_user_profile'])
 
     def get_context_data(self, **kwargs):
-        if not self.request.session.get('grain_active_user_profile'):
-            # FIXME: ValidationError not quite appropriate
-            raise ValidationError("No profile selected", code='invalid')
-        profile = get_object_or_404(UserProfile,
-            pk=self.request.session['grain_active_user_profile'])
+        profile = get_profile(self.request.session)
 
         context = super(IngredientListFull, self).get_context_data(**kwargs)
         context['full'] = self.__class__ == IngredientListFull
@@ -167,11 +162,7 @@ class IngredientCreate(generic.edit.CreateView):
     template_name = "grain/generic_form.html"
 
     def form_valid(self, form):
-        if not self.request.session.get('grain_active_user_profile'):
-            # FIXME: ValidationError not quite appropriate
-            raise ValidationError("No profile selected", code='invalid')
-        profile = get_object_or_404(UserProfile,
-            pk=self.request.session['grain_active_user_profile'])
+        profile = get_profile(self.request.session)
 
         if form.instance.price.currency.code != profile.currency:
             raise ValidationError("Must use same currency as profile")
@@ -205,22 +196,12 @@ class CategoryCreate(generic.edit.CreateView):
 
 class ProductList(generic.ListView):
     def get_queryset(self):
-        if not self.request.session.get('grain_active_user_profile'):
-            # FIXME: ValidationError not quite appropriate
-            raise ValidationError("No profile selected", code='invalid')
-        profile = get_object_or_404(UserProfile,
-            pk=self.request.session['grain_active_user_profile'])
-
+        profile = get_profile(self.request.session)
         return Product.objects.filter(price__gt=Money(0, profile.currency))
 
 
 def product_raw(request, pk):
-    if not request.session.get('grain_active_user_profile'):
-        # FIXME: ValidationError not quite appropriate
-        raise ValidationError("No profile selected", code='invalid')
-    profile = get_object_or_404(UserProfile,
-        pk=request.session['grain_active_user_profile'])
-
+    profile = get_profile(self.request.session)
     prod = get_object_or_404(Product, pk=pk,
                              price__gt=Money(0, profile.currency))
     prod_dict = {
@@ -239,11 +220,7 @@ class ProductCreate(generic.edit.CreateView):
     success_url = reverse_lazy('grain:product_list')
 
     def form_valid(self, form):
-        if not self.request.session.get('grain_active_user_profile'):
-            # FIXME: ValidationError not quite appropriate
-            raise ValidationError("No profile selected", code='invalid')
-        profile = get_object_or_404(UserProfile,
-            pk=self.request.session['grain_active_user_profile'])
+        profile = get_profile(self.request.session)
 
         if form.instance.price.currency.code != profile.currency:
             raise ValidationError("Must use same currency as profile")
@@ -251,12 +228,7 @@ class ProductCreate(generic.edit.CreateView):
 
 
 def ticket_create(request):
-    if not request.session.get('grain_active_user_profile'):
-        # FIXME: ValidationError not quite appropriate
-        raise ValidationError("No profile selected", code='invalid')
-    profile = get_object_or_404(UserProfile,
-        pk=request.session['grain_active_user_profile'])
-
+    profile = get_profile(self.request.session)
     form = TicketForm(profile.pk, request.POST)
     if not form.is_valid():
         raise ValidationError("Invalid form", code='invalid')
