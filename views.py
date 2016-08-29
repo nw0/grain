@@ -238,7 +238,16 @@ class ProductCreate(generic.edit.CreateView):
     fields = ['category', 'name', 'units', 'amount', 'fixed', 'price']
     success_url = reverse_lazy('grain:product_list')
 
-    # FIXME: only allow adding in profile currency
+    def form_valid(self, form):
+        if not self.request.session.get('grain_active_user_profile'):
+            # FIXME: ValidationError not quite appropriate
+            raise ValidationError("No profile selected", code='invalid')
+        profile = get_object_or_404(UserProfile,
+            pk=self.request.session['grain_active_user_profile'])
+
+        if form.instance.price.currency.code != profile.currency:
+            raise ValidationError("Must use same currency as profile")
+        return super(ProductCreate, self).form_valid(form)
 
 
 def ticket_create(request):
