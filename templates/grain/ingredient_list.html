@@ -86,7 +86,7 @@ $(document).ready(function(){
                 </thead>
                 <tbody>
                     {% for object in object_list %}
-                    <tr>
+                    <tr class="{% if object.exhausted %}danger{% endif %}">
                         <td>{{ object.product }}</td>
                         <td>{{ object.amount }} {{ object.product.units }}</td>
                         <td>{{ object.price }}</td>
@@ -94,6 +94,11 @@ $(document).ready(function(){
                         <td>{{ object.best_before }}</td>
                     </tr>
                     {% endfor %}
+                    {% if full %}
+                    <tr class="danger">
+                        <td colspan="5" style="text-align: center; font-size: .9em; font-style: italic;">exhausted items highlighted</td>
+                    </tr>
+                    {% endif %}
                 </tbody>
             </table>
         </div>
