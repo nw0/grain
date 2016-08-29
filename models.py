@@ -189,7 +189,7 @@ class TicketManager(models.Manager):
         assert used_on_ticket > 0, "Must use positive quantity"
         assert not ingredient.exhausted, "Ingredient must not be exhausted"
 
-        ticket = self.create(ingredient=ingredient,used=used_on_ticket,
+        ticket = self.create(ingredient=ingredient, used=used_on_ticket,
                              dish=dish, cost=Money(0, currency))
         ticket.save()
         ingredient.update_usage(used_on_ticket)

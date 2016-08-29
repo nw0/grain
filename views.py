@@ -252,11 +252,12 @@ def ticket_create(request):
     if not form.is_valid():
         raise ValidationError("Invalid form", code='invalid')
 
-    ticket = Ticket.objects.create_ticket(
+    Ticket.objects.create_ticket(
         form.cleaned_data['ingredient'],
         form.cleaned_data['units_used'],
         form.cleaned_data['dish'],
         profile.currency,
         form.cleaned_data['exhausted'],
     )
-    return HttpResponseRedirect(reverse("grain:meal_detail", args=[form.cleaned_data['dish'].meal.pk]))
+    return HttpResponseRedirect(reverse("grain:meal_detail",
+        args=[form.cleaned_data['dish'].meal.pk]))
