@@ -201,7 +201,7 @@ class ProductList(generic.ListView):
 
 
 def product_raw(request, pk):
-    profile = get_profile(self.request.session)
+    profile = get_profile(request.session)
     prod = get_object_or_404(Product, pk=pk,
                              price__gt=Money(0, profile.currency))
     prod_dict = {
@@ -228,7 +228,7 @@ class ProductCreate(generic.edit.CreateView):
 
 
 def ticket_create(request):
-    profile = get_profile(self.request.session)
+    profile = get_profile(request.session)
     form = TicketForm(profile.pk, request.POST)
     if not form.is_valid():
         raise ValidationError("Invalid form", code='invalid')
