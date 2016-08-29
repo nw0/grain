@@ -15,7 +15,12 @@
                 <td>{{ dish.cost_closed }}</td>
                 <td>{{ dish.cost_open }}</td>
                 <td>
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Add</button>
+                    <ul>
+                        {% for ticket in dish.ticket_set.all %}
+                        <li>{{ ticket }}</li>
+                        {% endfor %}
+                        <li><button type="button" class="btn btn-link btn-md" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</button></li>
+                    </ul>
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
