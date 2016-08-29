@@ -2,6 +2,8 @@ from datetime import date
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import signals
+from django.dispatch import receiver
 from django.utils.encoding import python_2_unicode_compatible
 from djmoney.models.fields import CurrencyField, MoneyField
 from moneyed import Money
@@ -96,11 +98,11 @@ class Ingredient(models.Model):
         assert not self.exhausted, "Ingredient has been exhausted"
 
         self.used_amount += delta
-        affected_tickets = self.ticket_set.all()
-        for ticket in affected_tickets:
-            ticket.update_cost(self.price / self.used_amount)
+        cpu = self.price / self.used_amount if self.used_amount != 0 else 0
+        for ticket in self.ticket_set.all():
+            ticket.update_cost(cpu)
         self.save()
-        return self.price / self.used_amount
+        return cpu
 
     def set_exhausted(self, exhausted):
         if exhausted != self.exhausted:
@@ -189,10 +191,9 @@ class TicketManager(models.Manager):
         assert used_on_ticket > 0, "Must use positive quantity"
         assert not ingredient.exhausted, "Ingredient must not be exhausted"
 
-        ticket = self.create(ingredient=ingredient, used=used_on_ticket,
+        ticket = self.create(ingredient=ingredient, used=0,
                              dish=dish, cost=Money(0, currency))
-        ticket.save()
-        ingredient.update_usage(used_on_ticket)
+        ticket.update_usage(used_on_ticket)
         if exhausted:
             ingredient.set_exhausted(True)
         return ticket
@@ -207,6 +208,11 @@ class Ticket(models.Model):
     cost = MoneyField(max_digits=10, decimal_places=4)
     final = models.BooleanField(default=False)
     dish = models.ForeignKey(Dish)
+
+    def update_usage(self, delta):
+        self.used += delta
+        self.save()
+        self.ingredient.update_usage(delta)
 
     def update_cost(self, cost_per_unit):
         assert not self.final, "Cannot modify finalised tickets"
@@ -228,5 +234,19 @@ class Ticket(models.Model):
     def __str__(self):
         return "%s [%s]" % (self.ingredient, self.used)
 
+
+@receiver(signals.pre_delete, sender=Ticket)
+def clean_ticket(sender, **kwargs):
+    ticket = kwargs.get('instance')
+    was_final = ticket.final
+
+    if was_final:
+        ticket.ingredient.set_exhausted(False)
+        ticket.final = False
+
+    ticket.update_usage(-ticket.used)
+
+    if was_final:
+        ticket.ingredient.set_exhausted(True)
 
 # TODO: event log
