@@ -162,6 +162,18 @@ class IngredientDetail(generic.DetailView):
         return Ingredient.objects.filter(
             owner__pk=self.request.session['grain_active_user_profile'])
 
+    def post(self, *args, **kwargs):
+        profile = get_profile(self.request.session)
+        ingredient = get_object_or_404(Ingredient, pk=kwargs.get('pk'),
+                                       owner=profile)
+
+        if 'finalise' in self.request.POST:
+            ingredient.set_exhausted(True)
+        elif 'definalise' in self.request.POST:
+            ingredient.set_exhausted(False)
+        return HttpResponseRedirect(reverse('grain:ingredient_detail',
+                                            args=[ingredient.pk]))
+
 
 class IngredientCreate(generic.edit.CreateView):
     model = Ingredient
