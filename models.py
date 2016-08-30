@@ -1,4 +1,5 @@
 from datetime import date
+from decimal import Decimal
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -98,7 +99,10 @@ class Ingredient(models.Model):
         assert not self.exhausted, "Ingredient has been exhausted"
 
         self.used_amount += delta
-        cpu = self.price / self.used_amount if self.used_amount != 0 else 0
+        if self.used_amount != 0:
+            cpu = self.price / self.used_amount
+        else:
+            cpu = Money(0, self.price.currency.code)
         for ticket in self.ticket_set.all():
             ticket.update_cost(cpu)
         self.save()
