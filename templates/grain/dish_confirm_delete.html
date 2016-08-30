@@ -1,0 +1,50 @@
+{% extends "grain/base.html" %}
+{% load bootstrap3 %}
+{% load grain_extras %}
+
+{% block content %}
+<h1>Delete Dish</h1>
+<h2>{{ object }}</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Info</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td>Meal</td>
+                        <td>{{ object.meal }}</td>
+                    </tr>
+                    <tr>
+                        <td>Method</td>
+                        <td>{{ object.get_method_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>Cost</td>
+                        <td>Confirmed: {{ object.cost_closed }}<br>Open: {{ object.cost_open }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h3>Confirm</h3>
+        <form action="" method="post">
+            {% csrf_token %}
+            <p>Are you sure you want to delete <strong>{{ object }}</strong>?</p>
+            {% if object.ticket_set.all %}
+            <p>You will also delete the following tickets (costs will be reassigned for the ingredients):</p>
+            <ul>
+                {% for ticket in object.ticket_set.all %}
+                <li><a href="{% url 'grain:ingredient_detail' ticket.ingredient.pk %}">{{ ticket }}</a> &mdash; {{ ticket.cost }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% buttons %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+            {% endbuttons %}
+        </form>
+    </div>
+</div>
+{% endblock content %}

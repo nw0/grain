@@ -11,16 +11,10 @@
         <tbody>
             {% for dish in dishes %}
             <tr>
-                <td>{{ dish }}</td>
-                <td>{{ dish.cost_closed }}</td>
-                <td>{{ dish.cost_open }}</td>
                 <td>
-                    <ul>
-                        {% for ticket in dish.ticket_set.all %}
-                        <li><a href="{% url 'grain:ingredient_detail' ticket.ingredient.pk %}">{{ ticket }}</a></li>
-                        {% endfor %}
-                        <li><button type="button" class="btn btn-link btn-md" data-toggle="modal" data-target="#dish_modal_{{ dish.pk }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</button></li>
-                    </ul>
+                    {{ dish }}<br>
+                    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#dish_modal_{{ dish.pk }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ingredient</button>
+                    <a role="button" class="btn btn-danger btn-xs" href="{% url 'grain:dish_delete' dish.pk %}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Dish</a>
                     <div class="modal fade" id="dish_modal_{{ dish.pk }}" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -42,6 +36,17 @@
                             </div>
                         </div>
                     </div>
+                </td>
+                <td>{{ dish.cost_closed }}</td>
+                <td>{{ dish.cost_open }}</td>
+                <td>
+                    <ul>
+                        {% for ticket in dish.ticket_set.all %}
+                        <li><a href="{% url 'grain:ingredient_detail' ticket.ingredient.pk %}">{{ ticket }}</a></li>
+                        {% empty %}
+                        <li>No ingredients</li>
+                        {% endfor %}
+                    </ul>
                 </td>
             </tr>
             {% endfor %}

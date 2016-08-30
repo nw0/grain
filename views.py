@@ -2,7 +2,7 @@ import json
 from datetime import date, timedelta
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -124,6 +124,18 @@ class DishCreate(generic.edit.CreateView):
         if form.instance.method not in [k for k, v in Dish.COOKING_STYLES]:
             raise ValidationError("Invalid cooking style", code='invalid')
         return super(DishCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('grain:meal_detail', args=[self.object.meal.id])
+
+
+class DishDelete(generic.edit.DeleteView):
+    model = Dish
+
+    def get_queryset(self):
+        profile = get_profile(self.request.session)
+        return Dish.objects.filter(
+            meal__owner__pk=self.request.session['grain_active_user_profile'])
 
     def get_success_url(self):
         return reverse('grain:meal_detail', args=[self.object.meal.id])

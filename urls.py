@@ -40,6 +40,10 @@ urlpatterns = [
         views.DishCreate.as_view(),
         name="dish_create"),
 
+    url(r'^dishes/delete/(?P<pk>\d+)/$',
+        views.DishDelete.as_view(),
+        name="dish_delete"),
+
     url(r'^inventory/$',
         views.IngredientList.as_view(),
         name="inventory"),
