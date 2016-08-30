@@ -61,7 +61,9 @@ def cat_list(categories):
 
 @register.simple_tag
 def get_profile_name(pk):
-    return get_object_or_404(UserProfile, pk=pk).note
+    if pk:
+        return get_object_or_404(UserProfile, pk=pk).note
+    return "No profile selected"
 
 
 @register.inclusion_tag('grain/embeds/profile_list_nav.html')
