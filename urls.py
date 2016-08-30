@@ -36,6 +36,10 @@ urlpatterns = [
         views.MealCreate.as_view(),
         name="meal_create"),
 
+    url(r'^meals/delete/(?P<pk>\d+)/$',
+        views.MealDelete.as_view(),
+        name="meal_delete"),
+
     url(r'^dishes/create/$',
         views.DishCreate.as_view(),
         name="dish_create"),

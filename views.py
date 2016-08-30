@@ -106,6 +106,19 @@ class MealCreate(generic.edit.CreateView):
         return reverse('grain:meal_detail', args=[self.object.id])
 
 
+class MealDelete(generic.edit.DeleteView):
+    model = Meal
+
+    def get_queryset(self):
+        return Meal.objects.filter(
+            owner__pk=self.request.session['grain_active_user_profile'])
+
+    def get_success_url(self):
+        return reverse('grain:calendar', kwargs={
+            'year': self.object.time.strftime("%Y"),
+            'month': self.object.time.strftime("%m")})
+
+
 class DishCreate(generic.edit.CreateView):
     model = Dish
     form_class = DishForm

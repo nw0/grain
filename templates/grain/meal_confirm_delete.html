@@ -1,0 +1,54 @@
+{% extends "grain/base.html" %}
+{% load bootstrap3 %}
+{% load grain_extras %}
+
+{% block content %}
+<h1>Delete Meal</h1>
+<h2>{{ object }}</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Info</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td>Date</td>
+                        <td>{{ object.time|date:"F j Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td>Meal</td>
+                        <td>{{ object.get_meal_type_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>Cost</td>
+                        <td>Confirmed: {{ object.cost_closed }}<br>Open: {{ object.cost_open }}</td>
+                    </tr>
+                    <tr>
+                        <td>Consumer</td>
+                        <td>{{ object.consumer|default_if_none:"&ndash;" }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h3>Confirm</h3>
+        <form action="" method="post">
+            {% csrf_token %}
+            <p>Are you sure you want to delete <strong>{{ object }}</strong>?</p>
+            {% if object.dish_set.all %}
+            <p>You will also delete the following dishes (costs will be reassigned for their ingredients):</p>
+            <ul>
+                {% for dish in object.dish_set.all %}
+                <li>{{ dish }} ({{ dish.cost_closed }} + {{ dish.cost_open }})</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% buttons %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+            {% endbuttons %}
+        </form>
+    </div>
+</div>
+{% endblock content %}
