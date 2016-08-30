@@ -2,7 +2,7 @@
 {% load grain_extras %}
 
 {% block content %}
-<h1>Categories <a class="btn btn-primary" href="{% url 'grain:category_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a></h1>
+<h1>Categories{% if perms.grain.can_add_ingredient_category %} <a class="btn btn-primary" href="{% url 'grain:category_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>{% endif %}</h1>
 
 <div class="col-md-4">
     {% cat_list object_list %}

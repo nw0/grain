@@ -1,6 +1,7 @@
 import json
 from datetime import date, timedelta
 
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
@@ -196,7 +197,8 @@ class UnitList(generic.ListView):
     model = Unit
 
 
-class UnitCreate(generic.edit.CreateView):
+class UnitCreate(PermissionRequiredMixin, generic.edit.CreateView):
+    permission_required = 'grain.can_create_unit'
     model = Unit
     fields = ['verbose', 'plural', 'short']
     success_url = reverse_lazy('grain:unit_list')
@@ -207,7 +209,8 @@ class CategoryList(generic.ListView):
     template_name = "grain/category_list.html"
 
 
-class CategoryCreate(generic.edit.CreateView):
+class CategoryCreate(PermissionRequiredMixin, generic.edit.CreateView):
+    permission_required = 'grain.can_create_ingredient_category'
     model = IngredientCategory
     fields = ['parent', 'name']
     template_name = "grain/category_form.html"

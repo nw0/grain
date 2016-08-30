@@ -1,7 +1,7 @@
 {% extends "grain/base.html" %}
 
 {% block content %}
-<h1>Units <a class="btn btn-primary" href="{% url 'grain:unit_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a></h1>
+<h1>Units{% if perms.grain.can_create_unit %} <a class="btn btn-primary" href="{% url 'grain:unit_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>{% endif %}</h1>
 
 <div class="col-md-4">
     <div class="table-responsive">
