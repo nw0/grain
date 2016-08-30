@@ -2,7 +2,7 @@
 {% load bootstrap3 %}
 
 {% block content %}
-<h1>Delete Meal</h1>
+<h1>Delete Ticket</h1>
 <h2>{{ object }}</h2>
 
 <div class="row">
@@ -12,20 +12,20 @@
             <table class="table table-striped">
                 <tbody>
                     <tr>
-                        <td>Date</td>
-                        <td>{{ object.time|date:"F j Y" }}</td>
+                        <td>Ingredient</td>
+                        <td><a href="{% url 'grain:ingredient_detail' object.ingredient.pk %}">{{ object.ingredient }}</a></td>
                     </tr>
                     <tr>
-                        <td>Meal</td>
-                        <td>{{ object.get_meal_type_display }}</td>
+                        <td>Amount used</td>
+                        <td>{{ object.used }}</td>
                     </tr>
                     <tr>
                         <td>Cost</td>
-                        <td>Confirmed: {{ object.cost_closed }}<br>Open: {{ object.cost_open }}</td>
+                        <td>{{ object.cost }}</td>
                     </tr>
                     <tr>
-                        <td>Consumer</td>
-                        <td>{{ object.consumer|default_if_none:"&ndash;" }}</td>
+                        <td>Dish</td>
+                        <td><a href="{% url 'grain:meal_detail' object.dish.meal.pk %}">{{ object.dish }}</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -36,14 +36,6 @@
         <form action="" method="post">
             {% csrf_token %}
             <p>Are you sure you want to delete <strong>{{ object }}</strong>?</p>
-            {% if object.dish_set.all %}
-            <p>You will also delete the following dishes (costs will be reassigned for their ingredients):</p>
-            <ul>
-                {% for dish in object.dish_set.all %}
-                <li>{{ dish }} ({{ dish.cost_closed }} + {{ dish.cost_open }})</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
             {% buttons %}
             <button type="submit" class="btn btn-danger">Delete</button>
             {% endbuttons %}

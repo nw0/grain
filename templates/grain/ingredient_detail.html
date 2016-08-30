@@ -57,6 +57,7 @@
                     <th>Dish</th>
                     <th>Amount</th>
                     <th>Cost</th>
+                    <th>Meta</th>
                 </thead>
                 <tbody>
                     {% for ticket in object.ticket_set.all %}
@@ -64,6 +65,7 @@
                         <td>{{ ticket.dish.meal }}: {{ ticket.dish.get_method_display}}</td>
                         <td>{{ ticket.used }}</td>
                         <td>{{ ticket.cost }}</td>
+                        <td><a href="{% url 'grain:ticket_delete' ticket.pk %}" role="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

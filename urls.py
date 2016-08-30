@@ -99,4 +99,8 @@ urlpatterns = [
     url(r'^ticket/create/$',
         views.ticket_create,
         name="ticket_create"),
+
+    url(r'^ticket/delete/(?P<pk>\d+)/$',
+        views.TicketDelete.as_view(),
+        name="ticket_delete"),
 ]

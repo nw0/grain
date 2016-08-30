@@ -21,6 +21,7 @@ def get_profile(session):
     return get_object_or_404(UserProfile,
                              pk=session['grain_active_user_profile'])
 
+
 def cal_redirect(request):
     if not request.session.get('grain_active_user_profile'):
         return HttpResponseRedirect(reverse('grain:profile_list'))
@@ -146,7 +147,6 @@ class DishDelete(generic.edit.DeleteView):
     model = Dish
 
     def get_queryset(self):
-        profile = get_profile(self.request.session)
         return Dish.objects.filter(
             meal__owner__pk=self.request.session['grain_active_user_profile'])
 
@@ -290,3 +290,15 @@ def ticket_create(request):
     )
     return HttpResponseRedirect(reverse("grain:meal_detail",
         args=[form.cleaned_data['dish'].meal.pk]))
+
+
+class TicketDelete(generic.edit.DeleteView):
+    model = Ticket
+
+    def get_queryset(self):
+        return Ticket.objects.filter(ingredient__owner__pk=
+            self.request.session['grain_active_user_profile'])
+
+    def get_success_url(self):
+        return reverse('grain:ingredient_detail',
+                       args=[self.object.ingredient.pk])
