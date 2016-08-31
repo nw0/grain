@@ -281,6 +281,8 @@ def ticket_create(request):
     if not form.is_valid():
         raise ValidationError("Invalid form", code='invalid')
 
+    if form.cleaned_data['dish'].meal.owner != profile:
+        raise PermissionDenied
     Ticket.objects.create_ticket(
         form.cleaned_data['ingredient'],
         form.cleaned_data['units_used'],
