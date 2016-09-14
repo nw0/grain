@@ -138,6 +138,13 @@ class Meal(models.Model):
     cost_open = MoneyField(max_digits=10, decimal_places=4)
     consumer = models.ForeignKey(Consumer, blank=True, null=True)
 
+    def cost_progress_breakdown(self):
+        cost_tot, pc_closed, pc_open = self.cost_closed + self.cost_open, 0, 0
+        if cost_tot:
+            pc_closed = 100 * self.cost_closed / cost_tot
+            pc_open = 100 * self.cost_open / cost_tot
+        return (cost_tot, pc_closed, pc_open)
+
     @python_2_unicode_compatible
     def __str__(self):
         return "%s on %s" % (self.get_meal_type_display(), self.time.strftime("%F"))
