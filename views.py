@@ -52,7 +52,7 @@ def profile_select(request, pk):
     return HttpResponseRedirect(reverse('grain:index'))
 
 
-class MealMonthArchive(generic.dates.MonthArchiveView):
+class MealMonthArchiveFull(generic.dates.MonthArchiveView):
     date_field = "time"
     allow_empty, allow_future = True, True
 
@@ -61,7 +61,7 @@ class MealMonthArchive(generic.dates.MonthArchiveView):
             owner__pk=self.request.session['grain_active_user_profile'])
 
     def get_context_data(self, **kwargs):
-        context = super(MealMonthArchive, self).get_context_data(**kwargs)
+        context = super(MealMonthArchiveFull, self).get_context_data(**kwargs)
         month = date(int(self.kwargs['year']), int(self.kwargs['month']), 1)
 
         context['object_list'] = Meal.objects.filter(
@@ -69,6 +69,17 @@ class MealMonthArchive(generic.dates.MonthArchiveView):
             time__gt=(month - timedelta(days=7)),
             time__lt=(month + timedelta(days=38)))
         context['meal_form'] = MealForm
+        context['full'] = True
+        return context
+
+class MealMonthArchive(MealMonthArchiveFull):
+    def get_queryset(self):
+        return super(MealMonthArchive, self).get_queryset()\
+                                            .filter(consumer=None)
+
+    def get_context_data(self, **kwargs):
+        context = super(MealMonthArchive, self).get_context_data(**kwargs)
+        context['full'] = False
         return context
 
 
