@@ -23,19 +23,27 @@ def calendar(month, meals):
                 'inmonth': current_day.month == month.month,
                 'date': current_day,
                 'today': current_day == date.today(),
-                'meals': [],
+                'meals': {},
             }
 
             while (meal_it < meal_count and
                    current_day == meals[meal_it].time.date()):
                 meal = meals[meal_it]
-                day['meals'].append({
-                    'meal': meal,
-                    'close_pc': 100 * meal.cost_closed.amount / BASELINE_MAX,
-                    'open_pc': 100 * meal.cost_open.amount / BASELINE_MAX,
-                    # TODO: consider bar UX for total_price = 0
-                    'total_price': meal.cost_closed + meal.cost_open,
-                    })
+                if meal.meal_type not in day['meals']:
+                    day['meals'][meal.meal_type] = {
+                        'display': meal.get_meal_type_display(),
+                        'close_pc': 0,
+                        'open_pc': 0,
+                        'total_price': 0,
+                        'meal_list': [],
+                    }
+                day['meals'][meal.meal_type]['total_price'] += meal.cost_closed\
+                                                             + meal.cost_open
+                day['meals'][meal.meal_type]['close_pc'] += 100 / BASELINE_MAX \
+                    * float(meal.cost_closed.amount)
+                day['meals'][meal.meal_type]['open_pc'] += 100 / BASELINE_MAX \
+                    * float(meal.cost_open.amount)
+                day['meals'][meal.meal_type]['meal_list'].append(meal)
                 meal_it += 1
 
             current_day += timedelta(days=1)
@@ -45,9 +53,8 @@ def calendar(month, meals):
 
 
 @register.inclusion_tag('grain/cal/cell.html')
-def cal_cell(cell):
-    # Summarise cell contents
-    return {'cell': cell}
+def cal_cell(day):
+    return {'cell': day}
 
 
 @register.inclusion_tag('grain/embeds/dish_list_embed.html')

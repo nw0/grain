@@ -2,13 +2,13 @@
   <div class="cal-month-day {% if cell.inmonth %}cal-day-inmonth{% else %}cal-day-outmonth{% endif %}{% if cell.today %} cal-day-today{% endif %}{% if cell.date.weekday >= 5 %} cal-day-weekend{% endif %}">
     <a href="{% url 'grain:meal_day' cell.date.year cell.date.month cell.date.day %}"><span class="pull-right" data-cal-date="{{ cell.date|date:"Y-m-d" }}" data-cal-view="day" data-toggle="tooltip" title data-original-title>{{ cell.date|date:"j" }}</span></a>
     <div class="day-content">
-      {% for meal in cell.meals %}
+      {% for meal_type, meal_data in cell.meals.items %}
       <div class="meal-line" style="padding-top: .2rem;">
-        <span class="meal-desc"><a href="{% url 'grain:meal_detail' meal.meal.id %}">{{ meal.meal.get_meal_type_display }} {{ meal.total_price }}</a></span>
+        <span class="meal-desc"><a href="{% url 'grain:meal_day_spec' cell.date.year cell.date.month cell.date.day meal_type %}">{{ meal_data.display }} {{ meal_data.total_price }}</a></span>
         <span class="meal-prog">
           <div class="progress" style="height: 2px; display: block; margin: 0;">
-            <div class="progress-bar progress-bar-success" style="width: {{ meal.close_pc }}%"></div>
-            <div class="progress-bar progress-bar-danger" style="width: {{ meal.open_pc }}%"></div>
+            <div class="progress-bar progress-bar-success" style="width: {{ meal_data.close_pc }}%"></div>
+            <div class="progress-bar progress-bar-danger" style="width: {{ meal_data.open_pc }}%"></div>
           </div>
         </span>
       </div>
