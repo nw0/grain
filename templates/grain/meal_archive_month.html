@@ -25,6 +25,11 @@ $(document).ready(function() {
 
 {% block content %}
 <h1>Calendar</h1>
+{% if full %}
+<a href="{% url 'grain:calendar' month.year month.month %}" role="button" class="btn btn-link">Own meals only</a>
+{% else %}
+<a href="{% url 'grain:calendar_all' month.year month.month %}" role="button" class="btn btn-link">All meals</a>
+{% endif %}
 
 <div class="row">
     <div class="col-md-2">
@@ -42,10 +47,10 @@ $(document).ready(function() {
             <span class="pull-right">
                 <div class="btn-group" role="group">
                     {% if previous_month %}
-                    <a href="{% url 'grain:calendar' previous_month.year previous_month.month %}" role="button" class="btn btn-default">&laquo; {{ previous_month|date:"N" }}</a>
+                    <a href="{% url link previous_month.year previous_month.month %}" role="button" class="btn btn-default">&laquo; {{ previous_month|date:"N" }}</a>
                     {% endif %}
                     {% if next_month %}
-                    <a href="{% url 'grain:calendar' next_month.year next_month.month %}" role="button" class="btn btn-default">{{ next_month|date:"N" }} &raquo;</a>
+                    <a href="{% url link next_month.year next_month.month %}" role="button" class="btn btn-default">{{ next_month|date:"N" }} &raquo;</a>
                     {% endif %}
                 </div>
             </span>

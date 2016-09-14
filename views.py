@@ -70,6 +70,7 @@ class MealMonthArchiveFull(generic.dates.MonthArchiveView):
             time__lt=(month + timedelta(days=38)))
         context['meal_form'] = MealForm
         context['full'] = True
+        context['link'] = "grain:calendar_all"
         return context
 
 class MealMonthArchive(MealMonthArchiveFull):
@@ -80,6 +81,7 @@ class MealMonthArchive(MealMonthArchiveFull):
     def get_context_data(self, **kwargs):
         context = super(MealMonthArchive, self).get_context_data(**kwargs)
         context['full'] = False
+        context['link'] = "grain:calendar"
         return context
 
 

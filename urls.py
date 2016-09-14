@@ -28,6 +28,10 @@ urlpatterns = [
         views.MealMonthArchive.as_view(month_format='%m'),
         name="calendar"),
 
+    url(r'^calendar/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/all/$',
+        views.MealMonthArchiveFull.as_view(month_format='%m'),
+        name="calendar_all"),
+
     url(r'^meals/(?P<pk>\d+)/$',
         views.MealDetail.as_view(),
         name="meal_detail"),
