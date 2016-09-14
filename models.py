@@ -15,13 +15,13 @@ class UserProfile(models.Model):
 
     A profile will handle ingredients and meals in a single currency.
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ManyToManyField(User)
     note = models.CharField(max_length=24)
     currency = CurrencyField(default='GBP')
 
     @python_2_unicode_compatible
     def __str__(self):
-        return "%s %s: %s" % (self.user, self.currency, self.note)
+        return "%s: %s" % (self.currency, self.note)
 
 
 class Consumer(models.Model):

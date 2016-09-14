@@ -32,7 +32,7 @@ def cal_redirect(request):
 
 class ProfileList(generic.ListView):
     def get_queryset(self):
-        return UserProfile.objects.filter(user=self.request.user)
+        return self.request.user.userprofile_set.all()
 
 
 class ProfileCreate(generic.edit.CreateView):
@@ -41,7 +41,8 @@ class ProfileCreate(generic.edit.CreateView):
     success_url = reverse_lazy('grain:profile_list')
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        form.instance.save()
+        form.instance.user.add(self.request.user)
         return super(ProfileCreate, self).form_valid(form)
 
 
