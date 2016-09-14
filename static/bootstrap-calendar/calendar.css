@@ -188,14 +188,13 @@ Heavy adaptations by Nicholas Sim
 span[data-cal-date] {
   font-size: 1.1em;
   font-weight: normal;
+  color: #333;
   opacity: 0.9;
-  cursor: default;
   margin-top: 1rem;
   margin-right: 1.2rem;
 }
 .cal-day-outmonth span[data-cal-date] {
   opacity: 0.5;
-  cursor: default;
 }
 .cal-day-outmonth {
   opacity: 0.9;

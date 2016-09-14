@@ -2,6 +2,7 @@
 
 {% block content %}
 <h1>Meals <small>{{ day|date:"jS F Y" }}</small></h1>
+<a href="{% url 'grain:calendar' day.year day.month %}" role="button" class="btn btn-link">&laquo; Calendar</a>
 
 <div class="row">
   <div class="col-md-8">
@@ -21,7 +22,7 @@
           {% endifchanged %}
           <tr>
             <td>
-              {{ meal.cost_progress_breakdown.0 }}
+              <a href="{% url "grain:meal_detail" meal.id %}">{{ meal.cost_progress_breakdown.0 }}</a>
               <div class="progress" style="max-width: 12em;">
                 <div class="progress-bar progress-bar-success" style="width: {{ meal.cost_progress_breakdown.1 }}%;">{{ meal.cost_closed.amount|floatformat:2 }}</div>
                 <div class="progress-bar progress-bar-danger" style="width: {{ meal.cost_progress_breakdown.2 }}%;">{{ meal.cost_open.amount|floatformat:2 }}</div>
