@@ -1,0 +1,45 @@
+{% extends "grain/base.html" %}
+
+{% block content %}
+<h1>Meals <small>{{ day|date:"jS F Y" }}</small></h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <th>Cost</th>
+                    <th>Dishes</th>
+                    <th>Consumer</th>
+                </thead>
+                <tbody>
+                    {% for meal in object_list|dictsort:"meal_type" %}
+                    {% ifchanged meal.meal_type %}
+                    <tr>
+                        <td colspan="3" style="text-align: center; font-weight: 700;">{{ meal.get_meal_type_display }}</td>
+                    </tr>
+                    {% endifchanged %}
+                    <tr>
+                        <td>
+                            {{ meal.cost_progress_breakdown.0 }}
+                            <div class="progress" style="max-width: 12em;">
+                                <div class="progress-bar progress-bar-success" style="width: {{ meal.cost_progress_breakdown.1 }}%;">{{ meal.cost_closed.amount|floatformat:2 }}</div>
+                                <div class="progress-bar progress-bar-danger" style="width: {{ meal.cost_progress_breakdown.2 }}%;">{{ meal.cost_open.amount|floatformat:2 }}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <ul>
+                                {% for dish in meal.dish_set.all %}
+                                <li>{{ dish }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{ meal.consumer|default_if_none:"self" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

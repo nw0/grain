@@ -85,6 +85,15 @@ class MealMonthArchive(MealMonthArchiveFull):
         return context
 
 
+class MealDayArchive(generic.dates.DayArchiveView):
+    date_field = "time"
+    allow_empty, allow_future = True, True
+
+    def get_queryset(self):
+        return Meal.objects.filter(
+            owner__pk=self.request.session['grain_active_user_profile'])
+
+
 class MealDetail(generic.DetailView):
     model = Meal
 
