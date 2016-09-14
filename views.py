@@ -94,6 +94,17 @@ class MealDayArchive(generic.dates.DayArchiveView):
             owner__pk=self.request.session['grain_active_user_profile'])
 
 
+class MealDayArchiveSpecific(MealDayArchive):
+    def get_queryset(self):
+        return super(MealDayArchiveSpecific, self).get_queryset().filter(
+            meal_type=self.kwargs['meal_type'])
+
+    def get_context_data(self, **kwargs):
+        context = super(MealDayArchiveSpecific, self).get_context_data(**kwargs)
+        context['specific'] = True
+        return context
+
+
 class MealDetail(generic.DetailView):
     model = Meal
 

@@ -36,6 +36,10 @@ urlpatterns = [
         views.MealDayArchive.as_view(month_format='%m'),
         name="meal_day"),
 
+    url(r'^meals/date/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/(?P<day>[0-9]+)/(?P<meal_type>\d+)/$',
+        views.MealDayArchiveSpecific.as_view(month_format='%m'),
+        name="meal_day_spec"),
+
     url(r'^meals/(?P<pk>\d+)/$',
         views.MealDetail.as_view(),
         name="meal_detail"),

@@ -38,6 +38,11 @@
             <td>{{ meal.consumer|default_if_none:"self" }}</td>
           </tr>
           {% endfor %}
+          {% if specific %}
+          <tr class="danger">
+            <td colspan="3" style="text-align: center; font-size: .9em; font-style: italic;">only showing one mealtime</td>
+          </tr>
+          {% endif %}
         </tbody>
       </table>
     </div>
