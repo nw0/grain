@@ -1,24 +1,24 @@
 {% load radix_extras %}
 {% load grain_extras %}
 <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{% url 'radix:index' %}">Grain</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="{% nav_active request 'grain:index' %}"><a href="{% url 'grain:index' %}">Home</a></li>
-                <li class="{% nav_active request 'grain:inventory' %}"><a href="{% url 'grain:inventory' %}">Inventory</a></li>
-                <li class="{% nav_active request 'grain:product_list' %}"><a href="{% url 'grain:product_list' %}">Products</a></li>
-                <li class="{% nav_active request 'grain:category_list' %}"><a href="{% url 'grain:category_list' %}">Categories</a></li>
-                <li class="{% nav_active request 'grain:unit_list' %}"><a href="{% url 'grain:unit_list' %}">Units</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-pawn" aria-hidden="true"></span> {% get_profile_name request.session.grain_active_user_profile %} <span class="caret"></span></a>
-                    {% get_profile_list request.user %}
-                </li>
-            </ul>
-        </div>
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'radix:index' %}">Grain</a>
     </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="{% nav_active request 'grain:index' %}"><a href="{% url 'grain:index' %}">Home</a></li>
+        <li class="{% nav_active request 'grain:inventory' %}"><a href="{% url 'grain:inventory' %}">Inventory</a></li>
+        <li class="{% nav_active request 'grain:product_list' %}"><a href="{% url 'grain:product_list' %}">Products</a></li>
+        <li class="{% nav_active request 'grain:category_list' %}"><a href="{% url 'grain:category_list' %}">Categories</a></li>
+        <li class="{% nav_active request 'grain:unit_list' %}"><a href="{% url 'grain:unit_list' %}">Units</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-pawn" aria-hidden="true"></span> {% get_profile_name request.session.grain_active_user_profile %} <span class="caret"></span></a>
+          {% get_profile_list request.user %}
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>

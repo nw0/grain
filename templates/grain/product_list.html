@@ -4,33 +4,33 @@
 <h1>Products <a class="btn btn-primary" href="{% url 'grain:product_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a></h1>
 
 <div class="col-md-8">
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <th>Category</th>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Usual Price</th>
-            </thead>
-            <tbody>
-                {% for product in object_list|dictsort:"category.get_parent_name_list" %}
-                <tr>
-                    <td style="font-size: 0.85em;">
-                        {% for cat in product.category.get_parent_name_list %}
-                        {{ cat }}{% if not forloop.last %} &raquo;{% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>{{ product.name }}</td>
-                    {% if product.fixed %}
-                    <td>{{ product.amount }} {{ product.units }}</td>
-                    <td>{{ product.price }}</td>
-                    {% else %}
-                    <td colspan="2">{{ product.amount }} {{ product.units }} for {{ product.price }}</td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <th>Category</th>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Usual Price</th>
+      </thead>
+      <tbody>
+        {% for product in object_list|dictsort:"category.get_parent_name_list" %}
+        <tr>
+          <td style="font-size: 0.85em;">
+            {% for cat in product.category.get_parent_name_list %}
+            {{ cat }}{% if not forloop.last %} &raquo;{% endif %}
+            {% endfor %}
+          </td>
+          <td>{{ product.name }}</td>
+          {% if product.fixed %}
+          <td>{{ product.amount }} {{ product.units }}</td>
+          <td>{{ product.price }}</td>
+          {% else %}
+          <td colspan="2">{{ product.amount }} {{ product.units }} for {{ product.price }}</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock content %}

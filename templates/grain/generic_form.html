@@ -5,12 +5,12 @@
 <h1>Form</h1>
 
 <div class="col-md-4">
-    <form method="post" action="">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        {% buttons %}
-        <button type="submit" class="btn btn-primary">Submit</button>
-        {% endbuttons %}
-    </form>
+  <form method="post" action="">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+    {% endbuttons %}
+  </form>
 </div>
 {% endblock content %}

@@ -6,71 +6,71 @@
 <h1>{{ object }}{% if object.exhausted %} <small>(exhausted)</small>{% endif %}</h1>
 
 <div class="row">
-    <div class="col-md-4">
-        <h2>Info</h2>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td>Price</td>
-                        <td>{{ object.price }}</td>
-                    </tr>
-                    <tr>
-                        <td>Original amount</td>
-                        <td>{{ object.amount }} {{ object.product.units}}</td>
-                    </tr>
-                    <tr>
-                        <td>Units used</td>
-                        <td>{{ object.used_amount }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ object.get_expiry_type_display|capfirst }}</td>
-                        <td>{{ object.best_before }}</td>
-                    </tr>
-                    <tr>
-                        <td>Purchased on</td>
-                        <td>{{ object.purchase_date }}</td>
-                    </tr>
-                    <tr>
-                        <td>Exhausted</td>
-                        <td>
-                            {{ object.exhausted|yesno|capfirst }}
-                            <form style="display:inline;" action="{% url 'grain:ingredient_detail' object.pk %}" method="post">
-                                {% csrf_token %}
-                                {% if object.exhausted %}
-                                <button type="submit" class="btn btn-default btn-xs" name="definalise">De-finalise</button>
-                                {% else %}
-                                <button type="submit" class="btn btn-default btn-xs" name="finalise">Finalise</button>
-                                {% endif %}
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="col-md-4">
+    <h2>Info</h2>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <td>Price</td>
+            <td>{{ object.price }}</td>
+          </tr>
+          <tr>
+            <td>Original amount</td>
+            <td>{{ object.amount }} {{ object.product.units}}</td>
+          </tr>
+          <tr>
+            <td>Units used</td>
+            <td>{{ object.used_amount }}</td>
+          </tr>
+          <tr>
+            <td>{{ object.get_expiry_type_display|capfirst }}</td>
+            <td>{{ object.best_before }}</td>
+          </tr>
+          <tr>
+            <td>Purchased on</td>
+            <td>{{ object.purchase_date }}</td>
+          </tr>
+          <tr>
+            <td>Exhausted</td>
+            <td>
+              {{ object.exhausted|yesno|capfirst }}
+              <form style="display:inline;" action="{% url 'grain:ingredient_detail' object.pk %}" method="post">
+                {% csrf_token %}
+                {% if object.exhausted %}
+                <button type="submit" class="btn btn-default btn-xs" name="definalise">De-finalise</button>
+                {% else %}
+                <button type="submit" class="btn btn-default btn-xs" name="finalise">Finalise</button>
+                {% endif %}
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="col-md-8">
-        <h2>Tickets</h2>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <th>Dish</th>
-                    <th>Amount</th>
-                    <th>Cost</th>
-                    <th>Meta</th>
-                </thead>
-                <tbody>
-                    {% for ticket in object.ticket_set.all %}
-                    <tr>
-                        <td>{{ ticket.dish.meal }}: {{ ticket.dish.get_method_display}}</td>
-                        <td>{{ ticket.used }}</td>
-                        <td>{{ ticket.cost }}</td>
-                        <td><a href="{% url 'grain:ticket_delete' ticket.pk %}" role="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+  </div>
+  <div class="col-md-8">
+    <h2>Tickets</h2>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <th>Dish</th>
+          <th>Amount</th>
+          <th>Cost</th>
+          <th>Meta</th>
+        </thead>
+        <tbody>
+          {% for ticket in object.ticket_set.all %}
+          <tr>
+            <td>{{ ticket.dish.meal }}: {{ ticket.dish.get_method_display}}</td>
+            <td>{{ ticket.used }}</td>
+            <td>{{ ticket.cost }}</td>
+            <td><a href="{% url 'grain:ticket_delete' ticket.pk %}" role="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>
 {% endblock content %}

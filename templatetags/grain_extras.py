@@ -46,6 +46,7 @@ def calendar(month, meals):
 
 @register.inclusion_tag('grain/cal/cell.html')
 def cal_cell(cell):
+    # Summarise cell contents
     return {'cell': cell}
 
 

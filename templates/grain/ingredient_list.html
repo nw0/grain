@@ -9,46 +9,46 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('.datepicker').datepicker({
-        format: 'yyyy-mm-dd',
-        weekStart: 1,
-        autoclose: true,
-        disableTouchKeyboard: true,
-        todayHighlight: true,
-    });
+  $('.datepicker').datepicker({
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    autoclose: true,
+    disableTouchKeyboard: true,
+    todayHighlight: true,
+  });
 });
 </script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
-    loaded = false;
-    g_data = null;
+  loaded = false;
+  g_data = null;
+  $('#{{ ingredient_form.amount.auto_id }}').attr('disabled', true);
+  $('#{{ ingredient_form.product.auto_id }}').on('change', function(e){
     $('#{{ ingredient_form.amount.auto_id }}').attr('disabled', true);
-    $('#{{ ingredient_form.product.auto_id }}').on('change', function(e){
-        $('#{{ ingredient_form.amount.auto_id }}').attr('disabled', true);
-        if ($(this).val()){
-            $.get(  "{% url 'grain:product_raw_noid' %}" + $(this).val(),
-            function(data){
-                g_data = jQuery.parseJSON(data);
-                loaded = true;
-                $('#{{ ingredient_form.price.auto_id }}_0').val(g_data.usual_price);
-                $('#{{ ingredient_form.price.auto_id }}_0').change();
-                $('#{{ ingredient_form.amount.auto_id }}').val(g_data.amount);
-                document.querySelector('label[for="{{ ingredient_form.amount.id_for_label }}"]').textContent = 'Amount (' + g_data.units + ')';
-            });
-        } else {
-            $('#{{ ingredient_form.price.auto_id }}_0').val("0.00");
-            $('#{{ ingredient_form.amount.auto_id }}').val("0.00");
-            loaded = false;
-        }
-        e.preventDefault();
-    });
-    $('#{{ ingredient_form.price.auto_id }}_0').on('change', function(e){
-        if (loaded && !g_data.fixed) {
-            $('#{{ ingredient_form.amount.auto_id }}').val(Math.round(g_data.amount / g_data.usual_price * 100 * $('#{{ ingredient_form.price.auto_id }}_0').val()) / 100);
-            $('#{{ ingredient_form.amount.auto_id }}').attr('disabled', false);
-        }
-    });
+    if ($(this).val()){
+      $.get(  "{% url 'grain:product_raw_noid' %}" + $(this).val(),
+      function(data){
+        g_data = jQuery.parseJSON(data);
+        loaded = true;
+        $('#{{ ingredient_form.price.auto_id }}_0').val(g_data.usual_price);
+        $('#{{ ingredient_form.price.auto_id }}_0').change();
+        $('#{{ ingredient_form.amount.auto_id }}').val(g_data.amount);
+        document.querySelector('label[for="{{ ingredient_form.amount.id_for_label }}"]').textContent = 'Amount (' + g_data.units + ')';
+      });
+    } else {
+      $('#{{ ingredient_form.price.auto_id }}_0').val("0.00");
+      $('#{{ ingredient_form.amount.auto_id }}').val("0.00");
+      loaded = false;
+    }
+    e.preventDefault();
+  });
+  $('#{{ ingredient_form.price.auto_id }}_0').on('change', function(e){
+    if (loaded && !g_data.fixed) {
+      $('#{{ ingredient_form.amount.auto_id }}').val(Math.round(g_data.amount / g_data.usual_price * 100 * $('#{{ ingredient_form.price.auto_id }}_0').val()) / 100);
+      $('#{{ ingredient_form.amount.auto_id }}').attr('disabled', false);
+    }
+  });
 });//]]>
 </script>
 {% endblock scripts %}
@@ -62,46 +62,46 @@ $(document).ready(function(){
 {% endif %}
 
 <div class="row">
-    <div class="col-md-3">
-        <h2>Add item</h2>
-        <form method="post" action="{% url 'grain:ingredient_create' %}">
-            {% csrf_token %}
-            {% bootstrap_form ingredient_form %}
-            {% buttons %}
-            <button type="submit" class="btn btn-primary">Create</button>
-            {% endbuttons %}
-        </form>
-    </div>
+  <div class="col-md-3">
+    <h2>Add item</h2>
+    <form method="post" action="{% url 'grain:ingredient_create' %}">
+      {% csrf_token %}
+      {% bootstrap_form ingredient_form %}
+      {% buttons %}
+      <button type="submit" class="btn btn-primary">Create</button>
+      {% endbuttons %}
+    </form>
+  </div>
 
-    <div class="col-md-9">
-        <h2>Items</h2>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <th>Product</th>
-                    <th>Amount</th>
-                    <th>Cost</th>
-                    <th>Used</th>
-                    <th>Best Before</th>
-                </thead>
-                <tbody>
-                    {% for object in object_list %}
-                    <tr class="{% if object.exhausted %}danger{% endif %}">
-                        <td><a href="{% url 'grain:ingredient_detail' object.pk %}">{{ object.product }}</a></td>
-                        <td>{{ object.amount }} {{ object.product.units }}</td>
-                        <td>{{ object.price }}</td>
-                        <td>{{ object.used_amount }}</td>
-                        <td>{{ object.best_before }}</td>
-                    </tr>
-                    {% endfor %}
-                    {% if full %}
-                    <tr class="danger">
-                        <td colspan="5" style="text-align: center; font-size: .9em; font-style: italic;">exhausted items highlighted</td>
-                    </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-        </div>
+  <div class="col-md-9">
+    <h2>Items</h2>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <th>Product</th>
+          <th>Amount</th>
+          <th>Cost</th>
+          <th>Used</th>
+          <th>Best Before</th>
+        </thead>
+        <tbody>
+          {% for object in object_list %}
+          <tr class="{% if object.exhausted %}danger{% endif %}">
+            <td><a href="{% url 'grain:ingredient_detail' object.pk %}">{{ object.product }}</a></td>
+            <td>{{ object.amount }} {{ object.product.units }}</td>
+            <td>{{ object.price }}</td>
+            <td>{{ object.used_amount }}</td>
+            <td>{{ object.best_before }}</td>
+          </tr>
+          {% endfor %}
+          {% if full %}
+          <tr class="danger">
+            <td colspan="5" style="text-align: center; font-size: .9em; font-style: italic;">exhausted items highlighted</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>
 {% endblock content %}

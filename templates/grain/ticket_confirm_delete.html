@@ -6,40 +6,40 @@
 <h2>{{ object }}</h2>
 
 <div class="row">
-    <div class="col-md-4">
-        <h3>Info</h3>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td>Ingredient</td>
-                        <td><a href="{% url 'grain:ingredient_detail' object.ingredient.pk %}">{{ object.ingredient }}</a></td>
-                    </tr>
-                    <tr>
-                        <td>Amount used</td>
-                        <td>{{ object.used }}</td>
-                    </tr>
-                    <tr>
-                        <td>Cost</td>
-                        <td>{{ object.cost }}</td>
-                    </tr>
-                    <tr>
-                        <td>Dish</td>
-                        <td><a href="{% url 'grain:meal_detail' object.dish.meal.pk %}">{{ object.dish }}</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+  <div class="col-md-4">
+    <h3>Info</h3>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <td>Ingredient</td>
+            <td><a href="{% url 'grain:ingredient_detail' object.ingredient.pk %}">{{ object.ingredient }}</a></td>
+          </tr>
+          <tr>
+            <td>Amount used</td>
+            <td>{{ object.used }}</td>
+          </tr>
+          <tr>
+            <td>Cost</td>
+            <td>{{ object.cost }}</td>
+          </tr>
+          <tr>
+            <td>Dish</td>
+            <td><a href="{% url 'grain:meal_detail' object.dish.meal.pk %}">{{ object.dish }}</a></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="col-md-8">
-        <h3>Confirm</h3>
-        <form action="" method="post">
-            {% csrf_token %}
-            <p>Are you sure you want to delete <strong>{{ object }}</strong>?</p>
-            {% buttons %}
-            <button type="submit" class="btn btn-danger">Delete</button>
-            {% endbuttons %}
-        </form>
-    </div>
+  </div>
+  <div class="col-md-8">
+    <h3>Confirm</h3>
+    <form action="" method="post">
+      {% csrf_token %}
+      <p>Are you sure you want to delete <strong>{{ object }}</strong>?</p>
+      {% buttons %}
+      <button type="submit" class="btn btn-danger">Delete</button>
+      {% endbuttons %}
+    </form>
+  </div>
 </div>
 {% endblock content %}

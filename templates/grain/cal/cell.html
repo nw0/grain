@@ -1,18 +1,18 @@
 <div class="cal-cell1 cal-cell" data-cal-row="-day{{ cell.day_of_week }}">
-    <div class="cal-month-day {% if cell.inmonth %}cal-day-inmonth{% else %}cal-day-outmonth{% endif %}{% if cell.today %} cal-day-today{% endif %}{% if cell.date.weekday >= 5 %} cal-day-weekend{% endif %}">
-        <span class="pull-right" data-cal-date="{{ cell.date|date:"Y-m-d" }}" data-cal-view="day" data-toggle="tooltip" title data-original-title>{{ cell.date|date:"j" }}</span>
-        <div class="day-content">
-            {% for meal in cell.meals %}
-            <div class="meal-line" style="padding-top: .2rem;">
-                <span class="meal-desc"><a href="{% url 'grain:meal_detail' meal.meal.id %}">{{ meal.meal.get_meal_type_display }} {{ meal.total_price }}</a></span>
-                <span class="meal-prog">
-                    <div class="progress" style="height: 2px; display: block; margin: 0;">
-                        <div class="progress-bar progress-bar-success" style="width: {{ meal.close_pc }}%"></div>
-                        <div class="progress-bar progress-bar-danger" style="width: {{ meal.open_pc }}%"></div>
-                    </div>
-                </span>
-            </div>
-            {% endfor %}
-        </div>
+  <div class="cal-month-day {% if cell.inmonth %}cal-day-inmonth{% else %}cal-day-outmonth{% endif %}{% if cell.today %} cal-day-today{% endif %}{% if cell.date.weekday >= 5 %} cal-day-weekend{% endif %}">
+    <span class="pull-right" data-cal-date="{{ cell.date|date:"Y-m-d" }}" data-cal-view="day" data-toggle="tooltip" title data-original-title>{{ cell.date|date:"j" }}</span>
+    <div class="day-content">
+      {% for meal in cell.meals %}
+      <div class="meal-line" style="padding-top: .2rem;">
+        <span class="meal-desc"><a href="{% url 'grain:meal_detail' meal.meal.id %}">{{ meal.meal.get_meal_type_display }} {{ meal.total_price }}</a></span>
+        <span class="meal-prog">
+          <div class="progress" style="height: 2px; display: block; margin: 0;">
+            <div class="progress-bar progress-bar-success" style="width: {{ meal.close_pc }}%"></div>
+            <div class="progress-bar progress-bar-danger" style="width: {{ meal.open_pc }}%"></div>
+          </div>
+        </span>
+      </div>
+      {% endfor %}
     </div>
+  </div>
 </div>

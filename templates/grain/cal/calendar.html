@@ -1,21 +1,21 @@
 {% load grain_extras %}
 <div id="calendar" class="cal-context" style="width: 100%">
-    <div class="cal-row-fluid cal-row-head">
-        <div class="cal-cell1">Monday</div>
-        <div class="cal-cell1">Tuesday</div>
-        <div class="cal-cell1">Wednesday</div>
-        <div class="cal-cell1">Thursday</div>
-        <div class="cal-cell1">Friday</div>
-        <div class="cal-cell1">Saturday</div>
-        <div class="cal-cell1">Sunday</div>
+  <div class="cal-row-fluid cal-row-head">
+    <div class="cal-cell1">Monday</div>
+    <div class="cal-cell1">Tuesday</div>
+    <div class="cal-cell1">Wednesday</div>
+    <div class="cal-cell1">Thursday</div>
+    <div class="cal-cell1">Friday</div>
+    <div class="cal-cell1">Saturday</div>
+    <div class="cal-cell1">Sunday</div>
+  </div>
+  <div class="cal-month-box">
+    {% for week in weeks %}
+    <div class="cal-row-fluid">
+      {% for day in week %}
+      {% cal_cell day %}
+      {% endfor %}
     </div>
-    <div class="cal-month-box">
-        {% for week in weeks %}
-        <div class="cal-row-fluid">
-            {% for day in week %}
-            {% cal_cell day %}
-            {% endfor %}
-        </div>
-        {% endfor %}
-    </div>
+    {% endfor %}
+  </div>
 </div>

@@ -1,7 +1,7 @@
 {% load grain_extras %}
 <ul>
-    {% for cat in cats %}
-    <li>{{ cat }}</li>
-    {% cat_list cat.ingredientcategory_set.all %}
-    {% endfor %}
+  {% for cat in cats %}
+  <li>{{ cat }}</li>
+  {% cat_list cat.ingredientcategory_set.all %}
+  {% endfor %}
 </ul>

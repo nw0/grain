@@ -10,13 +10,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('.datepicker').datepicker({
-        format: 'yyyy-mm-dd',
-        weekStart: 1,
-        autoclose: true,
-        disableTouchKeyboard: true,
-        todayHighlight: true,
-    });
+  $('.datepicker').datepicker({
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    autoclose: true,
+    disableTouchKeyboard: true,
+    todayHighlight: true,
+  });
 });
 </script>
 {% endblock scripts %}
@@ -32,30 +32,30 @@ $(document).ready(function() {
 {% endif %}
 
 <div class="row">
-    <div class="col-md-2">
-        <h3>Add Meal</h3>
-        <form method="post" action="{% url 'grain:meal_create' %}">
-            {% csrf_token %}
-            {% bootstrap_form meal_form %}
-            {% buttons %}
-            <button type="submit" class="btn btn-primary">Add</button>
-            {% endbuttons %}
-        </form>
-    </div>
-    <div class="col-md-10">
-        <h3>{{ month|date:"F Y" }}
-            <span class="pull-right">
-                <div class="btn-group" role="group">
-                    {% if previous_month %}
-                    <a href="{% url link previous_month.year previous_month.month %}" role="button" class="btn btn-default">&laquo; {{ previous_month|date:"N" }}</a>
-                    {% endif %}
-                    {% if next_month %}
-                    <a href="{% url link next_month.year next_month.month %}" role="button" class="btn btn-default">{{ next_month|date:"N" }} &raquo;</a>
-                    {% endif %}
-                </div>
-            </span>
-        </h3>
-        {% calendar month object_list %}
-    </div>
+  <div class="col-md-2">
+    <h3>Add Meal</h3>
+    <form method="post" action="{% url 'grain:meal_create' %}">
+      {% csrf_token %}
+      {% bootstrap_form meal_form %}
+      {% buttons %}
+      <button type="submit" class="btn btn-primary">Add</button>
+      {% endbuttons %}
+    </form>
+  </div>
+  <div class="col-md-10">
+    <h3>{{ month|date:"F Y" }}
+      <span class="pull-right">
+        <div class="btn-group" role="group">
+          {% if previous_month %}
+          <a href="{% url link previous_month.year previous_month.month %}" role="button" class="btn btn-default">&laquo; {{ previous_month|date:"N" }}</a>
+          {% endif %}
+          {% if next_month %}
+          <a href="{% url link next_month.year next_month.month %}" role="button" class="btn btn-default">{{ next_month|date:"N" }} &raquo;</a>
+          {% endif %}
+        </div>
+      </span>
+    </h3>
+    {% calendar month object_list %}
+  </div>
 </div>
 {% endblock content %}

@@ -5,11 +5,11 @@
 <h1>Profiles <small>Select a profile</small></h1>
 
 <div class="col-md-3">
-    <div class="list-group">
-        {% for profile in object_list %}
-        <a href="{% url 'grain:profile_select' profile.pk %}" class="list-group-item" style="color: #337ab7;">{{ profile }}</a>
-        {% endfor %}
-        <a href="{% url 'grain:profile_create' %}" class="list-group-item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New</a>
-    </div>
+  <div class="list-group">
+    {% for profile in object_list %}
+    <a href="{% url 'grain:profile_select' profile.pk %}" class="list-group-item" style="color: #337ab7;">{{ profile }}</a>
+    {% endfor %}
+    <a href="{% url 'grain:profile_create' %}" class="list-group-item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New</a>
+  </div>
 </div>
 {% endblock content %}
