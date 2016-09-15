@@ -47,8 +47,9 @@ class ProfileCreate(generic.edit.CreateView):
 
 
 def profile_select(request, pk):
+    # Try..except
     request.session['grain_active_user_profile'] \
-        = get_object_or_404(UserProfile, pk=pk).pk
+        = request.user.userprofile_set.get(pk=pk).pk
     return HttpResponseRedirect(reverse('grain:index'))
 
 
