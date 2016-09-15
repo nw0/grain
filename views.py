@@ -69,6 +69,12 @@ class ConsumerList(generic.ListView):
             owner__pk=self.request.session['grain_active_user_profile'])
 
 
+class ConsumerDetail(generic.DetailView):
+    def get_queryset(self):
+        return Consumer.objects.filter(
+            owner__pk=self.request.session['grain_active_user_profile'])
+
+
 class ConsumerCreate(generic.edit.CreateView):
     model = Consumer
     fields = ['name', 'actual_user']

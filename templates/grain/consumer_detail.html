@@ -1,0 +1,46 @@
+{% extends "grain/base.html" %}
+
+{% block content %}
+<h1>Consumer</h1>
+<a href="{% url 'grain:consumer_list' %}" role="button" class="btn btn-link">&laquo; Consumer List</a>
+<h2>{{ object }}{% if object.actual_user %} <small>{{ object.actual_user }}</small>{% endif %}</h2>
+<h3>Meal list</h3>
+
+<div class="col-md-8">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <th>Meal</th>
+        <th>Cost</th>
+        <th>Dishes</th>
+      </thead>
+      <tbody>
+        {% for meal in object.meal_set.all|dictsort:"time" %}
+        <tr>
+          <td><a href="{% url "grain:meal_detail" meal.id %}">{{ meal }}</a></td>
+          <td>
+            {{ meal.cost_progress_breakdown.0 }}
+            <div class="progress" style="max-width: 12em;">
+              <div class="progress-bar progress-bar-success" style="width: {{ meal.cost_progress_breakdown.1 }}%;">{{ meal.cost_closed.amount|floatformat:2 }}</div>
+              <div class="progress-bar progress-bar-danger" style="width: {{ meal.cost_progress_breakdown.2 }}%;">{{ meal.cost_open.amount|floatformat:2 }}</div>
+            </div>
+          </td>
+          <td>
+            <ul>
+              {% for dish in meal.dish_set.all %}
+              <li>{{ dish }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3" style="text-align: center; font-weight: 700;">No meals</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock content %}

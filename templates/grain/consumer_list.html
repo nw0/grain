@@ -7,7 +7,7 @@
 <div class="col-md-4">
   <ul>
     {% for object in object_list %}
-    <li>{{ object }}</li>
+    <li><a href="{% url 'grain:consumer_detail' object.pk %}">{{ object }}</a></li>
     {% empty %}
     <li><em>Sorry, no consumers</em></li>
     {% endfor %}

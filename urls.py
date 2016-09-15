@@ -32,6 +32,10 @@ urlpatterns = [
         views.ConsumerList.as_view(),
         name="consumer_list"),
 
+    url(r'^consumers/(?P<pk>\d+)/$',
+        views.ConsumerDetail.as_view(),
+        name="consumer_detail"),
+
     url(r'^consumers/create/$',
         views.ConsumerCreate.as_view(),
         name="consumer_create"),
