@@ -69,6 +69,16 @@ class ConsumerList(generic.ListView):
             owner__pk=self.request.session['grain_active_user_profile'])
 
 
+class ConsumerCreate(generic.edit.CreateView):
+    model = Consumer
+    fields = ['name', 'actual_user']
+    success_url = reverse_lazy('grain:consumer_list')
+
+    def form_valid(self, form):
+        form.instance.owner = get_profile(self.request.session)
+        return super(ConsumerCreate, self).form_valid(form)
+
+
 class MealMonthArchiveFull(generic.dates.MonthArchiveView):
     date_field = "time"
     allow_empty, allow_future = True, True
