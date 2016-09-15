@@ -1,0 +1,16 @@
+{% extends "grain/base.html" %}
+{% load grain_extras %}
+
+{% block content %}
+<h1>Consumers <small>{% get_profile_name request.session.grain_active_user_profile %}</small></h1>
+
+<div class="col-md-4">
+  <ul>
+    {% for object in object_list %}
+    <li>{{ object }}</li>
+    {% empty %}
+    <li><em>Sorry, no consumers</em></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock content %}

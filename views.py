@@ -10,8 +10,8 @@ from django.views import generic
 from moneyed import Money
 
 from .forms import DishForm, IngredientForm, MealForm, TicketForm
-from .models import (Dish, Ingredient, IngredientCategory, Meal, Product,
-                     Ticket, Unit, UserProfile)
+from .models import (Consumer, Dish, Ingredient, IngredientCategory, Meal,
+                     Product, Ticket, Unit, UserProfile)
 
 
 def get_profile(session):
@@ -61,6 +61,12 @@ def profile_select(request, pk):
     request.session['grain_active_user_profile'] \
         = request.user.userprofile_set.get(pk=pk).pk
     return HttpResponseRedirect(reverse('grain:index'))
+
+
+class ConsumerList(generic.ListView):
+    def get_queryset(self):
+        return Consumer.objects.filter(
+            owner__pk=self.request.session['grain_active_user_profile'])
 
 
 class MealMonthArchiveFull(generic.dates.MonthArchiveView):

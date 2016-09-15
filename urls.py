@@ -28,6 +28,10 @@ urlpatterns = [
         views.profile_select,
         name="profile_select"),
 
+    url(r'^consumers/$',
+        views.ConsumerList.as_view(),
+        name="consumer_list"),
+
     url(r'^calendar/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/$',
         views.MealMonthArchive.as_view(month_format='%m'),
         name="calendar"),
