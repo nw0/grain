@@ -9,6 +9,8 @@
 
 <div class="row">
   <div class="col-md-4">
+    <h3>Details</h3>
+    <p>Consumer: {% if meal.consumer %}<a href="{% url 'grain:consumer_detail' meal.consumer.pk %}">{{ meal.consumer }}</a>{% endif %}</p>
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Costs ({{ costs.0 }})</h3>
