@@ -16,6 +16,10 @@ urlpatterns = [
         views.ProfileList.as_view(),
         name="profile_list"),
 
+    url(r'^profiles/settings/$',
+        views.ProfileUpdate.as_view(),
+        name="profile_update"),
+
     url(r'^profiles/create/$',
         views.ProfileCreate.as_view(),
         name="profile_create"),

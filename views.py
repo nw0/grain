@@ -46,6 +46,16 @@ class ProfileCreate(generic.edit.CreateView):
         return super(ProfileCreate, self).form_valid(form)
 
 
+class ProfileUpdate(generic.edit.UpdateView):
+    fields = ['user']
+    template_name = 'grain/userprofile_update.html'
+    success_url = reverse_lazy('grain:profile_list')
+
+    def get_object(self):
+        return get_object_or_404(UserProfile,
+            pk=self.request.session['grain_active_user_profile'])
+
+
 def profile_select(request, pk):
     # Try..except
     request.session['grain_active_user_profile'] \
