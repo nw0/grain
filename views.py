@@ -1,7 +1,8 @@
 import json
 from datetime import date, timedelta
 
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import (PermissionRequiredMixin,
+                                        UserPassesTestMixin)
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
@@ -17,7 +18,7 @@ from .models import (Consumer, Dish, Ingredient, IngredientCategory, Meal,
 def get_profile(session):
     if not session.get('grain_active_user_profile'):
         # FIXME: ValidationError not quite appropriate
-        raise ValidationError("No profile selected", code='invalid')
+        raise PermissionDenied("No profile selected")
     return get_object_or_404(UserProfile,
                              pk=session['grain_active_user_profile'])
 
@@ -46,10 +47,14 @@ class ProfileCreate(generic.edit.CreateView):
         return super(ProfileCreate, self).form_valid(form)
 
 
-class ProfileUpdate(generic.edit.UpdateView):
+class ProfileUpdate(UserPassesTestMixin, generic.edit.UpdateView):
     fields = ['user']
     template_name = 'grain/userprofile_update.html'
     success_url = reverse_lazy('grain:profile_list')
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def get_object(self):
         return get_object_or_404(UserProfile,
@@ -63,31 +68,49 @@ def profile_select(request, pk):
     return HttpResponseRedirect(reverse('grain:index'))
 
 
-class ConsumerList(generic.ListView):
+class ConsumerList(UserPassesTestMixin, generic.ListView):
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
+
     def get_queryset(self):
         return Consumer.objects.filter(
             owner__pk=self.request.session['grain_active_user_profile'])
 
 
-class ConsumerDetail(generic.DetailView):
+class ConsumerDetail(UserPassesTestMixin, generic.DetailView):
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
+
     def get_queryset(self):
         return Consumer.objects.filter(
             owner__pk=self.request.session['grain_active_user_profile'])
 
 
-class ConsumerCreate(generic.edit.CreateView):
+class ConsumerCreate(UserPassesTestMixin, generic.edit.CreateView):
     model = Consumer
     fields = ['name', 'actual_user']
     success_url = reverse_lazy('grain:consumer_list')
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def form_valid(self, form):
         form.instance.owner = get_profile(self.request.session)
         return super(ConsumerCreate, self).form_valid(form)
 
 
-class MealMonthArchiveFull(generic.dates.MonthArchiveView):
+class MealMonthArchiveFull(UserPassesTestMixin, generic.dates.MonthArchiveView):
     date_field = "time"
     allow_empty, allow_future = True, True
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def get_queryset(self):
         month = date(int(self.kwargs['year']), int(self.kwargs['month']), 1)
@@ -124,9 +147,13 @@ class MealMonthArchive(MealMonthArchiveFull):
         return context
 
 
-class MealDayArchive(generic.dates.DayArchiveView):
+class MealDayArchive(UserPassesTestMixin, generic.dates.DayArchiveView):
     date_field = "time"
     allow_empty, allow_future = True, True
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def get_queryset(self):
         return Meal.objects.filter(
@@ -144,8 +171,11 @@ class MealDayArchiveSpecific(MealDayArchive):
         return context
 
 
-class MealDetail(generic.DetailView):
-    model = Meal
+class MealDetail(UserPassesTestMixin, generic.DetailView):
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def get_queryset(self):
         return Meal.objects.filter(
@@ -159,9 +189,13 @@ class MealDetail(generic.DetailView):
         return context
 
 
-class MealCreate(generic.edit.CreateView):
+class MealCreate(UserPassesTestMixin, generic.edit.CreateView):
     model = Meal
     form_class = MealForm
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def get_form_kwargs(self):
         kwargs = super(MealCreate, self).get_form_kwargs()
@@ -180,8 +214,11 @@ class MealCreate(generic.edit.CreateView):
         return reverse('grain:meal_detail', args=[self.object.id])
 
 
-class MealDelete(generic.edit.DeleteView):
-    model = Meal
+class MealDelete(UserPassesTestMixin, generic.edit.DeleteView):
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def get_queryset(self):
         return Meal.objects.filter(
@@ -193,9 +230,13 @@ class MealDelete(generic.edit.DeleteView):
             'month': self.object.time.strftime("%m")})
 
 
-class DishCreate(generic.edit.CreateView):
+class DishCreate(UserPassesTestMixin, generic.edit.CreateView):
     model = Dish
     form_class = DishForm
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def form_valid(self, form):
         profile = get_profile(self.request.session)
@@ -216,8 +257,11 @@ class DishCreate(generic.edit.CreateView):
         return reverse('grain:meal_detail', args=[self.object.meal.id])
 
 
-class DishDelete(generic.edit.DeleteView):
-    model = Dish
+class DishDelete(UserPassesTestMixin, generic.edit.DeleteView):
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def get_queryset(self):
         return Dish.objects.filter(
@@ -227,11 +271,15 @@ class DishDelete(generic.edit.DeleteView):
         return reverse('grain:meal_detail', args=[self.object.meal.id])
 
 
-class IngredientListFull(generic.ListView):
+class IngredientListFull(UserPassesTestMixin, generic.ListView):
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
+
     def get_queryset(self):
-        # TODO: redirect if no profile
         return Ingredient.objects.filter(
-            owner__pk=self.request.session['grain_active_user_profile'])
+            owner=get_profile(self.request.session))
 
     def get_context_data(self, **kwargs):
         profile = get_profile(self.request.session)
@@ -254,8 +302,11 @@ class IngredientList(IngredientListFull):
         return context
 
 
-class IngredientDetail(generic.DetailView):
-    model = Ingredient
+class IngredientDetail(UserPassesTestMixin, generic.DetailView):
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def get_queryset(self):
         return Ingredient.objects.filter(
@@ -274,11 +325,15 @@ class IngredientDetail(generic.DetailView):
                                             args=[ingredient.pk]))
 
 
-class IngredientCreate(generic.edit.CreateView):
+class IngredientCreate(UserPassesTestMixin, generic.edit.CreateView):
     model = Ingredient
     form_class = IngredientForm
     success_url = reverse_lazy('grain:inventory')
     template_name = "grain/generic_form.html"
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def form_valid(self, form):
         profile = get_profile(self.request.session)
@@ -315,7 +370,12 @@ class CategoryCreate(PermissionRequiredMixin, generic.edit.CreateView):
     success_url = reverse_lazy('grain:category_list')
 
 
-class ProductList(generic.ListView):
+class ProductList(UserPassesTestMixin, generic.ListView):
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
+
     def get_queryset(self):
         profile = get_profile(self.request.session)
         return Product.objects.filter(price__gt=Money(0, profile.currency))
@@ -349,6 +409,9 @@ class ProductCreate(generic.edit.CreateView):
 
 
 def ticket_create(request):
+    if 'grain_active_user_profile' not in request.session:
+        raise PermissionDenied("Must select profile")
+
     profile = get_profile(request.session)
     form = TicketForm(profile.pk, request.POST)
     if not form.is_valid():
@@ -367,8 +430,11 @@ def ticket_create(request):
         args=[form.cleaned_data['dish'].meal.pk]))
 
 
-class TicketDelete(generic.edit.DeleteView):
-    model = Ticket
+class TicketDelete(UserPassesTestMixin, generic.edit.DeleteView):
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
 
     def get_queryset(self):
         return Ticket.objects.filter(ingredient__owner__pk=
