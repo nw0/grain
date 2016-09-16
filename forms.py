@@ -3,7 +3,7 @@ import datetime
 from django import forms
 from django.utils.safestring import mark_safe
 
-from .models import Dish, Ingredient, Meal
+from .models import Consumer, Dish, Ingredient, Meal
 
 
 class BSDateInput(forms.TextInput):
@@ -18,6 +18,12 @@ class BSDateInput(forms.TextInput):
 class MealForm(forms.ModelForm):
     time = forms.DateField(label="Date", initial=datetime.date.today,
                            widget=BSDateInput())
+
+    def __init__(self, profile_id=None, *args, **kwargs):
+        super(MealForm, self).__init__(*args, **kwargs)
+        if profile_id is not None:
+            self.fields['consumer'].queryset = Consumer.objects.filter(
+                owner__pk=profile_id)
 
     class Meta:
         model = Meal

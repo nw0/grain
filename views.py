@@ -101,7 +101,8 @@ class MealMonthArchiveFull(generic.dates.MonthArchiveView):
         month = date(int(self.kwargs['year']), int(self.kwargs['month']), 1)
 
         context['object_list'] = self.get_queryset()
-        context['meal_form'] = MealForm
+        context['meal_form'] = MealForm(
+            profile_id=self.request.session['grain_active_user_profile'])
         # TODO: restrict consumers to profile
         context['full'] = True
         context['link'] = "grain:calendar_all"
@@ -161,6 +162,11 @@ class MealDetail(generic.DetailView):
 class MealCreate(generic.edit.CreateView):
     model = Meal
     form_class = MealForm
+
+    def get_form_kwargs(self):
+        kwargs = super(MealCreate, self).get_form_kwargs()
+        kwargs['profile_id'] = self.request.session['grain_active_user_profile']
+        return kwargs
 
     def form_valid(self, form):
         profile = get_profile(self.request.session)
