@@ -90,26 +90,31 @@ class MealMonthArchiveFull(generic.dates.MonthArchiveView):
     allow_empty, allow_future = True, True
 
     def get_queryset(self):
+        month = date(int(self.kwargs['year']), int(self.kwargs['month']), 1)
         return Meal.objects.filter(
-            owner__pk=self.request.session['grain_active_user_profile'])
+            owner__pk=self.request.session['grain_active_user_profile'],
+            time__gt=(month - timedelta(days=7)),
+            time__lt=(month + timedelta(days=38)))
 
     def get_context_data(self, **kwargs):
         context = super(MealMonthArchiveFull, self).get_context_data(**kwargs)
         month = date(int(self.kwargs['year']), int(self.kwargs['month']), 1)
 
-        context['object_list'] = Meal.objects.filter(
-            owner__pk=self.request.session['grain_active_user_profile'],
-            time__gt=(month - timedelta(days=7)),
-            time__lt=(month + timedelta(days=38)))
+        context['object_list'] = self.get_queryset()
         context['meal_form'] = MealForm
+        # TODO: restrict consumers to profile
         context['full'] = True
         context['link'] = "grain:calendar_all"
         return context
 
 class MealMonthArchive(MealMonthArchiveFull):
     def get_queryset(self):
-        return super(MealMonthArchive, self).get_queryset()\
-                                            .filter(consumer=None)
+        month = date(int(self.kwargs['year']), int(self.kwargs['month']), 1)
+
+        # FIXME: only select current profile's currency
+        return Meal.objects.filter(consumer__actual_user=self.request.user,
+            time__gt=(month - timedelta(days=7)),
+            time__lt=(month + timedelta(days=38)))
 
     def get_context_data(self, **kwargs):
         context = super(MealMonthArchive, self).get_context_data(**kwargs)

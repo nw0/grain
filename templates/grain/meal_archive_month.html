@@ -28,7 +28,7 @@ $(document).ready(function() {
 {% if full %}
 <a href="{% url 'grain:calendar' month.year month.month %}" role="button" class="btn btn-link">Own meals only</a>
 {% else %}
-<a href="{% url 'grain:calendar_all' month.year month.month %}" role="button" class="btn btn-link">All meals</a>
+<a href="{% url 'grain:calendar_all' month.year month.month %}" role="button" class="btn btn-link">All profile meals</a>
 {% endif %}
 
 <div class="row">
