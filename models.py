@@ -136,7 +136,7 @@ class Meal(models.Model):
     meal_type = models.IntegerField(choices=MEAL_CHOICES)
     cost_closed = MoneyField(max_digits=10, decimal_places=4)
     cost_open = MoneyField(max_digits=10, decimal_places=4)
-    consumer = models.ForeignKey(Consumer, blank=True, null=True)
+    consumer = models.ForeignKey(Consumer)
 
     def cost_progress_breakdown(self):
         cost_tot, pc_closed, pc_open = self.cost_closed + self.cost_open, 0, 0
