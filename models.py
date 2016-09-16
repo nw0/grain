@@ -10,6 +10,7 @@ from djmoney.models.fields import CurrencyField, MoneyField
 from moneyed import Money
 
 
+@python_2_unicode_compatible
 class UserProfile(models.Model):
     """Profile for Grain
 
@@ -19,32 +20,32 @@ class UserProfile(models.Model):
     note = models.CharField(max_length=24)
     currency = CurrencyField(default='GBP')
 
-    @python_2_unicode_compatible
     def __str__(self):
         return "%s: %s" % (self.currency, self.note)
 
 
+@python_2_unicode_compatible
 class Consumer(models.Model):
     owner = models.ForeignKey(UserProfile)
     actual_user = models.ForeignKey(User, blank=True, null=True)
     name = models.CharField(max_length=20)
 
-    @python_2_unicode_compatible
     def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class Unit(models.Model):
     """Custom unit class for groceries"""
     short = models.CharField("abbreviation", max_length=8)
     verbose = models.CharField("name (singular)", max_length=20)
     plural = models.CharField(max_length=20)
 
-    @python_2_unicode_compatible
     def __str__(self):
         return self.short
 
 
+@python_2_unicode_compatible
 class IngredientCategory(models.Model):
     """Cascading categories for ingredients"""
     parent = models.ForeignKey('self', default=None, blank=True, null=True)
@@ -58,11 +59,11 @@ class IngredientCategory(models.Model):
     class Meta:
         verbose_name_plural = "ingredient categories"
 
-    @python_2_unicode_compatible
     def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class Product(models.Model):
     """Classes of ingredients, in specific units and packaging"""
     name = models.CharField(max_length=60)
@@ -72,11 +73,11 @@ class Product(models.Model):
     units = models.ForeignKey(Unit)
     fixed = models.BooleanField(default=True)
 
-    @python_2_unicode_compatible
     def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class Ingredient(models.Model):
     """Specific instances of ingredients"""
     BEST_BEFORE, EXPIRES = "BBF", "EXP"
@@ -115,11 +116,11 @@ class Ingredient(models.Model):
             self.exhausted = exhausted
             self.save()
 
-    @python_2_unicode_compatible
     def __str__(self):
         return "%s" % self.product
 
 
+@python_2_unicode_compatible
 class Meal(models.Model):
     # FIXME: include docstring
     BREAKFAST, LUNCH, DINNER, SUPPER, TEA, SNACK = 0, 1, 2, 3, 4, 5
@@ -145,11 +146,11 @@ class Meal(models.Model):
             pc_open = 100 * self.cost_open / cost_tot
         return (cost_tot, pc_closed, pc_open)
 
-    @python_2_unicode_compatible
     def __str__(self):
         return "%s on %s" % (self.get_meal_type_display(), self.time.strftime("%F"))
 
 
+@python_2_unicode_compatible
 class Dish(models.Model):
     # FIXME: include docstring
     COOKING_STYLES = (
@@ -188,7 +189,6 @@ class Dish(models.Model):
     class Meta:
         verbose_name_plural = "dishes"
 
-    @python_2_unicode_compatible
     def __str__(self):
         tickets = self.ticket_set.all().order_by('-cost')
         if tickets.distinct().count() == 0:
@@ -210,6 +210,7 @@ class TicketManager(models.Manager):
         return ticket
 
 
+@python_2_unicode_compatible
 class Ticket(models.Model):
     # FIXME: include docstring
     objects = TicketManager()
@@ -241,7 +242,6 @@ class Ticket(models.Model):
             self.final = final
             self.save()
 
-    @python_2_unicode_compatible
     def __str__(self):
         return "%s [%s]" % (self.ingredient, self.used)
 
