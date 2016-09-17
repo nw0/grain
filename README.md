@@ -13,3 +13,6 @@ It should be more modular than [Mealy](https://github.com/nw0/mealy/), with rewo
 
 ## Code used
 1. [`bootstrap-calendar`](https://github.com/Serhioromano/bootstrap-calendar/). Adapted code and css for use in meal calendar.
+
+## Notes
+Anyone implementing _grain_ should pay attention to user authentication and authorisation. This has been left unhandled here, as I am managing it through another application, _radix_. You may wish to require users to be logged in on all views, which should take care of any problems.
