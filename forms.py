@@ -2,8 +2,9 @@ import datetime
 
 from django import forms
 from django.utils.safestring import mark_safe
+from moneyed import Money
 
-from .models import Consumer, Dish, Ingredient, Meal
+from .models import Consumer, Dish, Ingredient, Meal, Product
 
 
 class BSDateInput(forms.TextInput):
@@ -39,6 +40,16 @@ class DishForm(forms.ModelForm):
         fields = ['meal']
 
 
+def product_listing(currency):
+    products = {}
+    for p in Product.objects.filter(price__gt=Money(0, currency)):
+        v = str(p.vendor) if p.vendor else "Other"
+        if v not in products:
+            products[v] = []
+        products[v].append((p.pk, p))
+    return products.items()
+
+
 class IngredientForm(forms.ModelForm):
     amount = forms.FloatField(required=False)
     expiry_type = forms.ChoiceField(widget=forms.RadioSelect(),
@@ -47,6 +58,10 @@ class IngredientForm(forms.ModelForm):
     best_before = forms.DateField(label="Best before", widget=BSDateInput())
     purchase_date = forms.DateField(label="Purchased on", widget=BSDateInput(),
                                     initial=datetime.date.today)
+
+    def __init__(self, currency=None, *args, **kwargs):
+        super(IngredientForm, self).__init__(*args, **kwargs)
+        self.fields['product'].choices = product_listing(currency)
 
     class Meta:
         model = Ingredient
