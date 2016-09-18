@@ -59,7 +59,7 @@ class IngredientForm(forms.ModelForm):
     purchase_date = forms.DateField(label="Purchased on", widget=BSDateInput(),
                                     initial=datetime.date.today)
 
-    def __init__(self, currency=None, *args, **kwargs):
+    def __init__(self, currency="GBP", *args, **kwargs):
         super(IngredientForm, self).__init__(*args, **kwargs)
         self.fields['product'].choices = product_listing(currency)
 

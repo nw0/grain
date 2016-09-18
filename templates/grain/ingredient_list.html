@@ -5,8 +5,10 @@
 {% block scripts %}
 <link href="{% static 'bootstrap-calendar/calendar.css' %}" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.min.css" rel="stylesheet">
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
 <script>
 $(document).ready(function() {
   $('.datepicker').datepicker({
@@ -50,6 +52,15 @@ $(document).ready(function(){
     }
   });
 });//]]>
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#{{ ingredient_form.product.auto_id }}").select2({
+    placeholder: "Select a product",
+    allowClear: true,
+  });
+  $("#{{ ingredient_form.product.auto_id }}").val(null).trigger("change");
+});
 </script>
 {% endblock scripts %}
 
