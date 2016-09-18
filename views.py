@@ -397,7 +397,7 @@ def product_raw(request, pk):
 
 class ProductCreate(generic.edit.CreateView):
     model = Product
-    fields = ['category', 'name', 'units', 'amount', 'fixed', 'price']
+    fields = ['category', 'vendor', 'name', 'units', 'amount', 'fixed', 'price']
     success_url = reverse_lazy('grain:product_list')
 
     def form_valid(self, form):

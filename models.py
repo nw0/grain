@@ -64,9 +64,18 @@ class IngredientCategory(models.Model):
 
 
 @python_2_unicode_compatible
+class Vendor(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible
 class Product(models.Model):
     """Classes of ingredients, in specific units and packaging"""
     name = models.CharField(max_length=60)
+    vendor = models.ForeignKey(Vendor, blank=True, null=True, default=None)
     category = models.ForeignKey(IngredientCategory)
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='GBP')
     amount = models.FloatField()
@@ -74,7 +83,7 @@ class Product(models.Model):
     fixed = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return "%s %s" % (self.vendor if self.vendor else "Other", self.name)
 
 
 @python_2_unicode_compatible
