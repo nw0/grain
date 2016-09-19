@@ -1,0 +1,15 @@
+{% extends "grain/base.html" %}
+
+{% block content %}
+<h1>Vendors{% if perms.grain.can_create_vendor %} <a class="btn btn-primary" href="{% url 'grain:vendor_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>{% endif %}</h1>
+
+<div class="row">
+  <div class="col-md-4">
+    <ul>
+      {% for object in object_list %}
+      <li>{{ object }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock content %}

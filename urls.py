@@ -108,6 +108,14 @@ urlpatterns = [
         views.CategoryCreate.as_view(),
         name="category_create"),
 
+    url(r'^vendors/$',
+        views.VendorList.as_view(),
+        name="vendor_list"),
+
+    url(r'^vendors/create/$',
+        views.VendorCreate.as_view(),
+        name="vendor_create"),
+
     url(r'^products/$',
         views.ProductList.as_view(),
         name="product_list"),

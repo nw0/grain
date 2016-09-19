@@ -12,7 +12,7 @@ from moneyed import Money
 
 from .forms import DishForm, IngredientForm, MealForm, TicketForm
 from .models import (Consumer, Dish, Ingredient, IngredientCategory, Meal,
-                     Product, Ticket, Unit, UserProfile)
+                     Product, Ticket, Unit, UserProfile, Vendor)
 
 
 def get_profile(session):
@@ -369,6 +369,17 @@ class CategoryCreate(PermissionRequiredMixin, generic.edit.CreateView):
     fields = ['parent', 'name']
     template_name = "grain/category_form.html"
     success_url = reverse_lazy('grain:category_list')
+
+
+class VendorList(generic.ListView):
+    model = Vendor
+
+
+class VendorCreate(PermissionRequiredMixin, generic.edit.CreateView):
+    permission_required = 'grain.can_create_vendor'
+    model = Vendor
+    fields = ['name']
+    success_url = reverse_lazy('grain:vendor_list')
 
 
 class ProductList(UserPassesTestMixin, generic.ListView):
