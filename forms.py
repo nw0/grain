@@ -1,6 +1,7 @@
 import datetime
 
 from django import forms
+from django.core.exceptions import PermissionDenied
 from django.utils.safestring import mark_safe
 from moneyed import Money
 
@@ -25,6 +26,8 @@ class MealForm(forms.ModelForm):
         if profile_id is not None:
             self.fields['consumer'].queryset = Consumer.objects.filter(
                 owner__pk=profile_id)
+        else:
+            raise PermissionDenied
 
     class Meta:
         model = Meal

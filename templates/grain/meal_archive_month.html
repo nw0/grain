@@ -41,6 +41,17 @@ $(document).ready(function() {
       <button type="submit" class="btn btn-primary">Add</button>
       {% endbuttons %}
     </form>
+    <hr>
+    <div class="well" style="font-size: 0.85em; color: #555;">
+      <h4>Note</h4>
+      {% if full %}
+      <p>You are viewing meals listed on the selected profile, <em>regardless of consumer</em>.</p>
+      <p>To view all your meals in {{ profile.currency }}, click <strong>Own meals only</strong> above.</p>
+      {% else %}
+      <p>You are viewing <em>all meals you consumed</em> denominated in the profile currency, {{ profile.currency }}.</p>
+      <p>To view only profile meals, click <strong>All profile meals</strong> above.</p>
+      {% endif %}
+    </div>
   </div>
   <div class="col-md-10">
     <h3>{{ month|date:"F Y" }}

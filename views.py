@@ -126,17 +126,17 @@ class MealMonthArchiveFull(UserPassesTestMixin, generic.dates.MonthArchiveView):
         context['object_list'] = self.get_queryset()
         context['meal_form'] = MealForm(
             profile_id=self.request.session['grain_active_user_profile'])
-        # TODO: restrict consumers to profile
         context['full'] = True
         context['link'] = "grain:calendar_all"
+        context['profile'] = get_profile(self.request.session)
         return context
 
 class MealMonthArchive(MealMonthArchiveFull):
     def get_queryset(self):
         month = date(int(self.kwargs['year']), int(self.kwargs['month']), 1)
 
-        # FIXME: only select current profile's currency
         return Meal.objects.filter(consumer__actual_user=self.request.user,
+            cost_open__gte=Money(0, get_profile(self.request.session).currency),
             time__gt=(month - timedelta(days=7)),
             time__lt=(month + timedelta(days=38)))
 
