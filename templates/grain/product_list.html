@@ -4,7 +4,7 @@
 {% if messages %}
 {% for message in messages %}
 <div class="alert alert-{{ message.tags }}" role="alert">
-    {{ message }}
+  {{ message }}
 </div>
 {% endfor %}
 {% endif %}
@@ -30,9 +30,11 @@
           {% for product in object_list|dictsort:"category.get_parent_name_list" %}
           <tr>
             <td style="font-size: 0.85em;">
-              {% for cat in product.category.get_parent_name_list %}
-              {{ cat }}{% if not forloop.last %} &raquo;{% endif %}
-              {% endfor %}
+              <ol class="breadcrumb" style="margin: 0; padding: 0;">
+                {% for cat in product.category.get_parent_name_list %}
+                <li>{{ cat }}</li>
+                {% endfor %}
+              </ol>
             </td>
             <td>{{ product.name }}</td>
             <td>{{ product.vendor|default_if_none:"Other" }}</td>
