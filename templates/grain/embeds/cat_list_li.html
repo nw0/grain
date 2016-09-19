@@ -1,6 +1,6 @@
 {% load grain_extras %}
 <ul>
-  {% for cat in cats %}
+  {% for cat in cats|dictsort:'name' %}
   <li>{{ cat }}</li>
   {% cat_list cat.ingredientcategory_set.all %}
   {% endfor %}
