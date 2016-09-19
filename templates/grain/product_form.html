@@ -9,6 +9,11 @@
 $(document).ready(function() {
   $("#{{ form.category.auto_id }}").select2();
   $("#{{ form.vendor.auto_id }}").select2();
+
+  $("#{{ form.price.auto_id }}_1").prop("disabled", true);
+  $("form").bind('submit', function(){
+    $("#{{ form.price.auto_id }}_1").prop("disabled", false);
+  });
 });
 </script>
 {% endblock scripts %}

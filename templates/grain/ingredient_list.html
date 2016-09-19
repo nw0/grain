@@ -60,6 +60,11 @@ $(document).ready(function() {
     allowClear: true,
   });
   $("#{{ ingredient_form.product.auto_id }}").val(null).trigger("change");
+
+  $("#{{ ingredient_form.price.auto_id }}_1").prop("disabled", true);
+  $("form").bind('submit', function(){
+    $("#{{ ingredient_form.price.auto_id }}_1").prop("disabled", false);
+  });
 });
 </script>
 {% endblock scripts %}
