@@ -1,6 +1,7 @@
 import json
 from datetime import date, timedelta
 
+from django.contrib import messages
 from django.contrib.auth.mixins import (PermissionRequiredMixin,
                                         UserPassesTestMixin)
 from django.core.exceptions import PermissionDenied, ValidationError
@@ -417,6 +418,10 @@ class ProductCreate(generic.edit.CreateView):
 
         if form.instance.price.currency.code != profile.currency:
             raise ValidationError("Must use same currency as profile")
+        if "_add_another" in self.request.POST:
+            self.success_url = reverse('grain:product_create')
+        messages.success(self.request, "Created %s (%s)" %
+            (form.instance, form.instance.price))
         return super(ProductCreate, self).form_valid(form)
 
 
