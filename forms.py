@@ -65,6 +65,7 @@ class IngredientForm(forms.ModelForm):
     def __init__(self, currency="GBP", *args, **kwargs):
         super(IngredientForm, self).__init__(*args, **kwargs)
         self.fields['product'].choices = product_listing(currency)
+        self.fields['price'].initial = Money(0, currency)
 
     class Meta:
         model = Ingredient

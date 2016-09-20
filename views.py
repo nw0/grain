@@ -283,13 +283,10 @@ class IngredientListFull(UserPassesTestMixin, generic.ListView):
             owner=get_profile(self.request.session))
 
     def get_context_data(self, **kwargs):
-        profile = get_profile(self.request.session)
-
         context = super(IngredientListFull, self).get_context_data(**kwargs)
         context['full'] = self.__class__ == IngredientListFull
         context['ingredient_form'] = \
-            IngredientForm(initial={'price': Money(0, profile.currency)},
-                           currency=get_profile(self.request.session).currency)
+            IngredientForm(currency=get_profile(self.request.session).currency)
         return context
 
 
