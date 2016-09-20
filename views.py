@@ -334,12 +334,13 @@ class IngredientCreate(UserPassesTestMixin, generic.edit.CreateView):
     def test_func(self):
         return 'grain_active_user_profile' in self.request.session
 
-    def form_valid(self, form):
-        profile = get_profile(self.request.session)
+    def get_form_kwargs(self):
+        kwargs = super(IngredientCreate, self).get_form_kwargs()
+        kwargs['currency'] = get_profile(self.request.session).currency
+        return kwargs
 
-        if form.instance.price.currency.code != profile.currency:
-            raise ValidationError("Must use same currency as profile")
-        form.instance.owner = profile
+    def form_valid(self, form):
+        form.instance.owner = get_profile(self.request.session)
         if form.instance.product.fixed:
             form.instance.amount = form.instance.product.amount
         return super(IngredientCreate, self).form_valid(form)

@@ -67,6 +67,12 @@ class IngredientForm(forms.ModelForm):
         self.fields['product'].choices = product_listing(currency)
         self.fields['price'].initial = Money(0, currency)
 
+    def clean(self):
+        cleaned_data = super(IngredientForm, self).clean()
+        if cleaned_data['price'].currency != \
+                self.fields['price'].initial.currency:
+            self.add_error('price', "Must use same currency as profile")
+
     class Meta:
         model = Ingredient
         fields = ['product', 'price', 'amount', 'best_before', 'expiry_type',
