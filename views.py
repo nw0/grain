@@ -341,8 +341,6 @@ class IngredientCreate(UserPassesTestMixin, generic.edit.CreateView):
 
     def form_valid(self, form):
         form.instance.owner = get_profile(self.request.session)
-        if form.instance.product.fixed:
-            form.instance.amount = form.instance.product.amount
         return super(IngredientCreate, self).form_valid(form)
 
 

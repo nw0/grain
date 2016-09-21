@@ -61,6 +61,8 @@ class IngredientForm(forms.ModelForm):
     best_before = forms.DateField(label="Best before", widget=BSDateInput())
     purchase_date = forms.DateField(label="Purchased on", widget=BSDateInput(),
                                     initial=datetime.date.today)
+    partial = forms.BooleanField(required=False,
+        help_text="e.g. if adding half a bottle of spices")
 
     def __init__(self, currency="GBP", *args, **kwargs):
         super(IngredientForm, self).__init__(*args, **kwargs)
@@ -72,6 +74,8 @@ class IngredientForm(forms.ModelForm):
         if cleaned_data['price'].currency != \
                 self.fields['price'].initial.currency:
             self.add_error('price', "Must use same currency as profile")
+        if cleaned_data['product'].fixed and not cleaned_data['partial']:
+            self.cleaned_data['amount'] = cleaned_data['product'].amount
 
     class Meta:
         model = Ingredient

@@ -26,9 +26,12 @@ $(document).ready(function() {
 $(document).ready(function(){
   loaded = false;
   g_data = null;
-  $('#{{ ingredient_form.amount.auto_id }}').attr('disabled', true);
+  $('#{{ ingredient_form.amount.auto_id }}').prop('disabled', true);
+
   $('#{{ ingredient_form.product.auto_id }}').on('change', function(e){
-    $('#{{ ingredient_form.amount.auto_id }}').attr('disabled', true);
+    if (!$('#{{ ingredient_form.partial.auto_id }}').prop('checked')){
+      $('#{{ ingredient_form.amount.auto_id }}').prop('disabled', true);
+    }
     if ($(this).val()){
       $.get(  "{% url 'grain:product_raw_noid' %}" + $(this).val(),
       function(data){
@@ -49,7 +52,12 @@ $(document).ready(function(){
   $('#{{ ingredient_form.price.auto_id }}_0').on('change', function(e){
     if (loaded && !g_data.fixed) {
       $('#{{ ingredient_form.amount.auto_id }}').val(Math.round(g_data.amount / g_data.usual_price * 100 * $('#{{ ingredient_form.price.auto_id }}_0').val()) / 100);
-      $('#{{ ingredient_form.amount.auto_id }}').attr('disabled', false);
+      $('#{{ ingredient_form.amount.auto_id }}').prop('disabled', false);
+    }
+  });
+  $('#{{ ingredient_form.partial.auto_id }}').on('change', function(e){
+    if ($('#{{ ingredient_form.partial.auto_id }}').prop('checked')){
+      $('#{{ ingredient_form.amount.auto_id }}').prop('disabled', false);
     }
   });
 });//]]>
