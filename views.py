@@ -369,6 +369,13 @@ class CategoryCreate(PermissionRequiredMixin, generic.edit.CreateView):
     template_name = "grain/category_form.html"
     success_url = reverse_lazy('grain:category_list')
 
+    def form_valid(self, form):
+        if "_add_another" in self.request.POST:
+            self.success_url = reverse('grain:category_create')
+        messages.success(self.request, "Created %s (%s)" %
+            (form.instance, form.instance.parent))
+        return super(CategoryCreate, self).form_valid(form)
+
 
 class VendorList(generic.ListView):
     model = Vendor
@@ -414,6 +421,7 @@ class ProductCreate(generic.edit.CreateView):
     def form_valid(self, form):
         profile = get_profile(self.request.session)
 
+        # FIXME: this belongs in form.clean()
         if form.instance.price.currency.code != profile.currency:
             raise ValidationError("Must use same currency as profile")
         if "_add_another" in self.request.POST:
