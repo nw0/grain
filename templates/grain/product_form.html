@@ -21,14 +21,6 @@ $(document).ready(function() {
 {% endblock scripts %}
 
 {% block content %}
-{% if messages %}
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }}" role="alert">
-    {{ message }}
-</div>
-{% endfor %}
-{% endif %}
-
 <h1>New Product</h1>
 
 <div class="col-md-4">
