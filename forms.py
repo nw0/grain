@@ -76,6 +76,10 @@ class IngredientForm(forms.ModelForm):
             self.add_error('price', "Must use same currency as profile")
         if cleaned_data['product'].fixed and not cleaned_data['partial']:
             self.cleaned_data['amount'] = cleaned_data['product'].amount
+        if cleaned_data['amount'] < 0:
+            self.add_error('amount', "Must be positive")
+        if cleaned_data['price'].amount < 0:
+            self.add_error('price', "Must be positive")
 
     class Meta:
         model = Ingredient
