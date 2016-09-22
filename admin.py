@@ -1,10 +1,11 @@
 from django.contrib import admin
 
-from .models import (Dish, Ingredient, IngredientCategory, Meal, Product,
-                     Ticket, Unit, UserProfile, Vendor)
+from .models import (Consumer, Dish, Ingredient, IngredientCategory, Meal,
+                     Product, Ticket, Unit, UserProfile, Vendor)
 
 admin.site.register(UserProfile)
 admin.site.register(Unit)
+admin.site.register(Consumer)
 admin.site.register(IngredientCategory)
 admin.site.register(Vendor)
 admin.site.register(Product)
