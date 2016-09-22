@@ -422,11 +422,6 @@ class ProductCreate(generic.edit.CreateView):
         return kwargs
 
     def form_valid(self, form):
-        profile = get_profile(self.request.session)
-
-        # FIXME: this belongs in form.clean()
-        if form.instance.price.currency.code != profile.currency:
-            raise ValidationError("Must use same currency as profile")
         if "_add_another" in self.request.POST:
             self.success_url = reverse('grain:product_create')
         messages.success(self.request, "Created %s (%s)" %
