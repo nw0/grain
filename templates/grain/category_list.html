@@ -1,13 +1,21 @@
 {% extends "grain/base.html" %}
 {% load grain_extras %}
+{% load radix_extras %}
 
 {% block title %}Grain: Categories{% endblock %}
 
 {% block content %}
-<h1>Categories{% if perms.grain.can_add_ingredient_category %} <a class="btn btn-primary" href="{% url 'grain:category_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>{% endif %}</h1>
-<a href="{% url 'grain:product_list' %}" role="button" class="btn btn-link">&laquo; Products</a>
+<h1>Products</h1>
 
 <div class="row">
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="{% nav_active request 'grain:product_list' %}"><a href="{% url 'grain:product_list' %}" role="button" class="btn btn-link">Products</a></li>
+    <li role="presentation" class="{% nav_active request 'grain:category_list' %}"><a href="{% url 'grain:category_list' %}" role="button" class="btn btn-link">Categories</a></li>
+    <li role="presentation" class="{% nav_active request 'grain:vendor_list' %}"><a href="{% url 'grain:vendor_list' %}" role="button" class="btn btn-link">Vendors</a></li>
+    <li role="presentation" class="{% nav_active request 'grain:unit_list' %}"><a href="{% url 'grain:unit_list' %}" role="button" class="btn btn-link">Units</a></li>
+  </ul>
+
+  <h2>Categories{% if perms.grain.can_add_ingredient_category %} <a class="btn btn-primary" href="{% url 'grain:category_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>{% endif %}</h2>
   <div class="col-md-4">
     {% cat_list object_list %}
   </div>

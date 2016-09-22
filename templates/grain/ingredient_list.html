@@ -83,11 +83,6 @@ $(document).ready(function() {
 
 {% block content %}
 <h1>Inventory</h1>
-{% if full %}
-<a href="{% url 'grain:inventory' %}" role="button" class="btn btn-link">Current Items</a>
-{% else %}
-<a href="{% url 'grain:inventory_all' %}" role="button" class="btn btn-link">All Items</a>
-{% endif %}
 
 <div class="row">
   <div class="col-md-3">
@@ -102,7 +97,16 @@ $(document).ready(function() {
   </div>
 
   <div class="col-md-9">
-    <h2>Items</h2>
+    <h2>Contents{% if full %} (historical){% endif %}</h2>
+    <ul class="nav nav-tabs">
+      {% if full %}
+      <li role="presentation"><a href="{% url 'grain:inventory' %}" role="button" class="btn btn-link">Current Items</a></li>
+      <li role="presentation" class="active"><a href="#" role="button" class="btn btn-link">All Items</a></li>
+      {% else %}
+      <li role="presentation" class="active"><a href="#" role="button" class="btn btn-link">Current Items</a></li>
+      <li role="presentation"><a href="{% url 'grain:inventory_all' %}" role="button" class="btn btn-link">All Items</a></li>
+      {% endif %}
+    </ul>
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>

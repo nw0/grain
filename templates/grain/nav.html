@@ -7,9 +7,9 @@
     </div>
     <div id="navbar">
       <ul class="nav navbar-nav">
-        <li class="{% nav_active request 'grain:index' %}"><a href="{% url 'grain:index' %}">Home</a></li>
-        <li class="{% nav_active request 'grain:inventory' %}"><a href="{% url 'grain:inventory' %}">Inventory</a></li>
-        <li class="{% nav_active request 'grain:product_list' %}"><a href="{% url 'grain:product_list' %}">Products</a></li>
+        <li class="{% nav_active request 'grain:index' %}"><a href="{% url 'grain:index' %}">Calendar</a></li>
+        <li class="{% nav_active request 'grain:inventory grain:inventory_all' %}"><a href="{% url 'grain:inventory' %}">Inventory</a></li>
+        <li class="{% nav_active request 'grain:product_list grain:vendor_list grain:category_list grain:unit_list' %}"><a href="{% url 'grain:product_list' %}">Products</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">

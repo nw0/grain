@@ -25,15 +25,10 @@ $(document).ready(function() {
 
 {% block content %}
 <h1>Calendar</h1>
-{% if full %}
-<a href="{% url 'grain:calendar' month.year month.month %}" role="button" class="btn btn-link">Own meals only</a>
-{% else %}
-<a href="{% url 'grain:calendar_all' month.year month.month %}" role="button" class="btn btn-link">All profile meals</a>
-{% endif %}
 
 <div class="row">
   <div class="col-md-2">
-    <h3>Add Meal</h3>
+    <h2>Add Meal</h2>
     <form method="post" action="{% url 'grain:meal_create' %}">
       {% csrf_token %}
       {% bootstrap_form meal_form %}
@@ -46,15 +41,15 @@ $(document).ready(function() {
       <h4>Note</h4>
       {% if full %}
       <p>You are viewing meals listed on the selected profile, <em>regardless of consumer</em>.</p>
-      <p>To view all your meals in {{ profile.currency }}, click <strong>Own meals only</strong> above.</p>
+      <p>To view all your meals in {{ profile.currency }}, click <strong>Own meals only</strong>.</p>
       {% else %}
       <p>You are viewing <em>all meals you consumed</em> denominated in the profile currency, {{ profile.currency }}.</p>
-      <p>To view only profile meals, click <strong>All profile meals</strong> above.</p>
+      <p>To view only profile meals, click <strong>All profile meals</strong>.</p>
       {% endif %}
     </div>
   </div>
   <div class="col-md-10">
-    <h3>{{ month|date:"F Y" }}
+    <h2>{{ month|date:"F Y" }}
       <span class="pull-right">
         <div class="btn-group" role="group">
           {% if previous_month %}
@@ -65,7 +60,16 @@ $(document).ready(function() {
           {% endif %}
         </div>
       </span>
-    </h3>
+    </h2>
+    <ul class="nav nav-tabs">
+      {% if full %}
+      <li role="presentation"><a href="{% url 'grain:calendar' month.year month.month %}" role="button" class="btn btn-link">Own meals only</a></li>
+      <li role="presentation" class="active"><a href="#" role="button" class="btn btn-link">All profile meals</a></li>
+      {% else %}
+      <li role="presentation" class="active"><a href="#" role="button" class="btn btn-link">Own meals only</a></li>
+      <li role="presentation"><a href="{% url 'grain:calendar_all' month.year month.month %}" role="button" class="btn btn-link">All profile meals</a></li>
+      {% endif %}
+    </ul>
     {% calendar month object_list %}
   </div>
 </div>
