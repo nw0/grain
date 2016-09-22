@@ -11,6 +11,25 @@ from moneyed import Money
 
 
 @python_2_unicode_compatible
+class GrainEvent(models.Model):
+    CREATE, EDIT, DELETE = "creation", "update", "deletion"
+    LOG_ACTIONS = (
+        (CREATE, "Create"),
+        (EDIT, "Edit"),
+        (DELETE, "Delete")
+    )
+
+    action = models.CharField(choices=LOG_ACTIONS, max_length=20)
+    model = models.CharField(max_length=30)
+    object_pk = models.IntegerField()
+    user = models.ForeignKey(User)
+    time = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return "%s %s (%s)" % (self.model, self.action, self.user)
+
+
+@python_2_unicode_compatible
 class UserProfile(models.Model):
     """Profile for Grain
 
@@ -268,5 +287,3 @@ def clean_ticket(sender, **kwargs):
 
     if was_final:
         ticket.ingredient.set_exhausted(True)
-
-# TODO: event log

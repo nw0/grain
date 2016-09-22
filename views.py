@@ -12,8 +12,9 @@ from django.views import generic
 from moneyed import Money
 
 from .forms import DishForm, IngredientForm, MealForm, ProductForm, TicketForm
-from .models import (Consumer, Dish, Ingredient, IngredientCategory, Meal,
-                     Product, Ticket, Unit, UserProfile, Vendor)
+from .models import (Consumer, Dish, GrainEvent, Ingredient,
+                     IngredientCategory, Meal, Product, Ticket, Unit,
+                     UserProfile, Vendor)
 
 
 def get_profile(session):
@@ -424,8 +425,17 @@ class ProductCreate(generic.edit.CreateView):
     def form_valid(self, form):
         if "_add_another" in self.request.POST:
             self.success_url = reverse('grain:product_create')
+
+        form.instance.save()
         messages.success(self.request, "Created %s (%s)" %
             (form.instance, form.instance.price))
+        e = GrainEvent(
+            action=GrainEvent.CREATE,
+            model="Product",
+            object_pk=form.instance.pk,
+            user=self.request.user,
+        )
+        e.save()
         return super(ProductCreate, self).form_valid(form)
 
 
