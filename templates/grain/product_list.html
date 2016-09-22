@@ -4,17 +4,9 @@
 {% block title %}Grain: Products{% endblock %}
 
 {% block content %}
-<h1>Products</h1>
+<h1>Products <a class="btn btn-primary" href="{% url 'grain:product_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a></h1>
 
 <div class="row">
-  <ul class="nav nav-tabs">
-    <li role="presentation" class="{% nav_active request 'grain:product_list' %}"><a href="{% url 'grain:product_list' %}" role="button" class="btn btn-link">Products</a></li>
-    <li role="presentation" class="{% nav_active request 'grain:category_list' %}"><a href="{% url 'grain:category_list' %}" role="button" class="btn btn-link">Categories</a></li>
-    <li role="presentation" class="{% nav_active request 'grain:vendor_list' %}"><a href="{% url 'grain:vendor_list' %}" role="button" class="btn btn-link">Vendors</a></li>
-    <li role="presentation" class="{% nav_active request 'grain:unit_list' %}"><a href="{% url 'grain:unit_list' %}" role="button" class="btn btn-link">Units</a></li>
-  </ul>
-
-  <h2>Products <a class="btn btn-primary" href="{% url 'grain:product_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a></h2>
   <div class="col-md-12">
     <div class="table-responsive">
       <table class="table table-striped">
@@ -29,7 +21,7 @@
           {% for product in object_list|dictsort:"category.get_parent_name_list" %}
           <tr>
             <td style="font-size: 0.85em;">
-              <ol class="breadcrumb" style="margin: 0; padding: 0;">
+              <ol class="breadcrumb" style="margin: 0; padding: 0; background-color: rgba(0, 0, 0, 0)">
                 {% for cat in product.category.get_parent_name_list %}
                 <li>{{ cat }}</li>
                 {% endfor %}
