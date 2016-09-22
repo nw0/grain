@@ -1,6 +1,8 @@
 {% extends "grain/base.html" %}
 {% load grain_extras %}
 
+{% block title %}Grain: Consumers{% endblock %}
+
 {% block content %}
 <h1>Consumers <small>{% get_profile_name request.session.grain_active_user_profile %}</small> <a class="btn btn-primary" href="{% url 'grain:consumer_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a></h1>
 

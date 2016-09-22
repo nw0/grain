@@ -2,6 +2,8 @@
 {% load bootstrap3 %}
 {% load grain_extras %}
 
+{% block title %}Grain: {{ object.get_meal_type_display }} on {{ object.time|date:"jS F Y" }}{% endblock %}
+
 {% block content %}
 <h1>{{ object.get_meal_type_display }} <small><a href="{% url 'grain:meal_day' object.time.year object.time.month object.time.day %}">{{ object.time|date:"jS F Y" }}</a></small></h1>
 <a href="{% url 'grain:calendar' object.time.year object.time.month %}" role="button" class="btn btn-link">&laquo; Calendar</a>

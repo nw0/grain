@@ -3,6 +3,8 @@
 {% load bootstrap3 %}
 {% load grain_extras %}
 
+{% block title %}Grain: {{ month|date:"F Y" }}{% endblock %}
+
 {% block scripts %}
 <link href="{% static 'bootstrap-calendar/calendar.css' %}" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.min.css" rel="stylesheet">
@@ -20,8 +22,6 @@ $(document).ready(function() {
 });
 </script>
 {% endblock scripts %}
-
-{% block title %}Grain: Calendar{% endblock title %}
 
 {% block content %}
 <h1>Calendar</h1>

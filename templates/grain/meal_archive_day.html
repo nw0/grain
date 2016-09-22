@@ -1,5 +1,7 @@
 {% extends "grain/base.html" %}
 
+{% block title %}Grain: Meals on {{ day|date:"jS F Y" }}{% endblock %}
+
 {% block content %}
 <h1>Meals <small>{{ day|date:"jS F Y" }}</small></h1>
 <a href="{% url 'grain:calendar' day.year day.month %}" role="button" class="btn btn-link">&laquo; Calendar</a>

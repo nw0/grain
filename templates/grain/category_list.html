@@ -1,6 +1,8 @@
 {% extends "grain/base.html" %}
 {% load grain_extras %}
 
+{% block title %}Grain: Categories{% endblock %}
+
 {% block content %}
 <h1>Categories{% if perms.grain.can_add_ingredient_category %} <a class="btn btn-primary" href="{% url 'grain:category_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>{% endif %}</h1>
 <a href="{% url 'grain:product_list' %}" role="button" class="btn btn-link">&laquo; Products</a>

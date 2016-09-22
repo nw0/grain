@@ -2,6 +2,8 @@
 {% load bootstrap3 %}
 {% load grain_extras %}
 
+{% block title %}Grain: Ingredient{% endblock %}
+
 {% block content %}
 <h1>{{ object }}{% if object.exhausted %} <small>(exhausted)</small>{% endif %}</h1>
 
