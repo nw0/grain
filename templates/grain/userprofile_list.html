@@ -13,5 +13,17 @@
     {% endfor %}
     <a href="{% url 'grain:profile_create' %}" class="list-group-item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New</a>
   </div>
+  <div class="well">
+    <h4>About Profiles</h4>
+    <p>You need a profile to use <em>Grain</em>. Its <strong>Note</strong> is a name for identification which is displayed in the dropdown at the end of the navigation bar.</p>
+    <p>You will only be able to add products of the profile's currency to its inventory.</p>
+    <p><strong>Settings</strong> will allow you to add other users to collaborate. They can do all the same things as you, including:
+      <ul>
+        <li>Manage the inventory</li>
+        <li>Create and change meals</li>
+      </ul>
+    </p>
+    <p>The <strong>Consumer</strong> system allows you to create tags and associate specific meals with the people who ate them, whether or not they use <em>Grain</em>.Each meal <em>must</em> have a Consumer. If you have not done so, create a consumer associated with your username.</p>
+  </div>
 </div>
 {% endblock content %}
