@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.views import generic
 from moneyed import Money
 
-from .forms import DishForm, IngredientForm, MealForm, TicketForm
+from .forms import DishForm, IngredientForm, MealForm, ProductForm, TicketForm
 from .models import (Consumer, Dish, Ingredient, IngredientCategory, Meal,
                      Product, Ticket, Unit, UserProfile, Vendor)
 
@@ -413,8 +413,13 @@ def product_raw(request, pk):
 
 class ProductCreate(generic.edit.CreateView):
     model = Product
-    fields = ['category', 'vendor', 'name', 'units', 'amount', 'fixed', 'price']
+    form_class = ProductForm
     success_url = reverse_lazy('grain:product_list')
+
+    def get_form_kwargs(self):
+        kwargs = super(ProductCreate, self).get_form_kwargs()
+        kwargs['currency'] = get_profile(self.request.session).currency
+        return kwargs
 
     def form_valid(self, form):
         profile = get_profile(self.request.session)

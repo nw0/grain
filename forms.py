@@ -53,6 +53,28 @@ def product_listing(currency):
     return products.items()
 
 
+class ProductForm(forms.ModelForm):
+    def __init__(self, currency=None, *args, **kwargs):
+        super(ProductForm, self).__init__(*args, **kwargs)
+        if currency:
+            self.fields['price'].initial = Money(0, currency)
+
+    def clean(self):
+        cleaned_data = super(ProductForm, self).clean()
+        init_currency = self.fields['price'].initial.currency
+        if init_currency and cleaned_data['price'].currency != init_currency:
+            self.add_error('price', "Must use same currency as profile")
+        elif cleaned_data['price'].amount < 0:
+            self.add_error('price', "Must be positive")
+        if cleaned_data['amount'] < 0:
+            self.add_error('amount', "Must be positive")
+
+    class Meta:
+        model = Product
+        fields = ['category', 'vendor', 'name', 'units', 'amount', 'fixed',
+                  'price']
+
+
 class IngredientForm(forms.ModelForm):
     amount = forms.FloatField(required=False)
     expiry_type = forms.ChoiceField(widget=forms.RadioSelect(),
@@ -74,12 +96,12 @@ class IngredientForm(forms.ModelForm):
         if cleaned_data['price'].currency != \
                 self.fields['price'].initial.currency:
             self.add_error('price', "Must use same currency as profile")
+        elif cleaned_data['price'].amount < 0:
+            self.add_error('price', "Must be positive")
         if cleaned_data['product'].fixed and not cleaned_data['partial']:
             self.cleaned_data['amount'] = cleaned_data['product'].amount
         if cleaned_data['amount'] < 0:
             self.add_error('amount', "Must be positive")
-        if cleaned_data['price'].amount < 0:
-            self.add_error('price', "Must be positive")
 
     class Meta:
         model = Ingredient
