@@ -430,10 +430,12 @@ class ProductCreate(generic.edit.CreateView):
 
 
 def ticket_create(request):
-    if 'grain_active_user_profile' not in request.session:
-        raise PermissionDenied("Must select profile")
+    try:
+        profile = get_profile(request.session)
+    except PermissionDenied:
+        messages.warning(self.request, "Please select a profile")
+        return HttpResponseRedirect(reverse("grain:profile_list"))
 
-    profile = get_profile(request.session)
     form = TicketForm(profile.pk, request.POST)
     if not form.is_valid():
         raise ValidationError("Invalid form", code='invalid')
