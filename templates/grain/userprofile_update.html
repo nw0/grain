@@ -20,7 +20,7 @@
           {% for user in object.user.all %}
           <tr>
             <td>{{ user }}</td>
-            <td>{% if user != request.user %}<a href="#" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>{% endif %}</td>
+            <td>{% if user != request.user %}<a href="{% url 'grain:profile_remove_user' user.id %}" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>{% endif %}</td>
           </tr>
           {% endfor %}
         </tbody>

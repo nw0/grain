@@ -4,6 +4,7 @@ from datetime import date, timedelta
 from django.contrib import messages
 from django.contrib.auth.mixins import (PermissionRequiredMixin,
                                         UserPassesTestMixin)
+from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
@@ -37,6 +38,22 @@ def cal_redirect(request):
 class ProfileList(generic.ListView):
     def get_queryset(self):
         return self.request.user.userprofile_set.all()
+
+
+def profile_remove_user(request, user_id):
+    profile = get_profile(request.session)
+    user_id = int(user_id)
+
+    if user_id == request.user.id:
+        messages.error(request, "Can't remove yourself")
+    elif profile.user.filter(id=user_id).exists():
+        user = User.objects.get(id=user_id)
+        profile.user.remove(user)
+        messages.success(request, "Removed %s" % user)
+    else:
+        messages.error(request, "User not found")
+
+    return HttpResponseRedirect(reverse('grain:profile_update'))
 
 
 class ProfileUpdate(UserPassesTestMixin, generic.edit.FormView):

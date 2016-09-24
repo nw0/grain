@@ -20,6 +20,10 @@ urlpatterns = [
         views.ProfileUpdate.as_view(),
         name="profile_update"),
 
+    url(r'^profiles/users/(?P<user_id>\d+)/rm/$',
+        views.profile_remove_user,
+        name="profile_remove_user"),
+
     url(r'^profiles/create/$',
         views.ProfileCreate.as_view(),
         name="profile_create"),
