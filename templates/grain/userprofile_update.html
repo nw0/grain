@@ -1,18 +1,40 @@
 {% extends "grain/base.html" %}
 {% load bootstrap3 %}
 
-{% block title %}Grain: Edit Profile{% endblock %}
+{% block title %}Grain: Profile Settings{% endblock %}
 
 {% block content %}
-<h1>Profiles <small>{{ object }}</small></h1>
+<h1>Profile Settings <small>{{ object }}</small></h1>
 
-<div class="col-md-4">
-  <form method="post" action="{% url 'grain:profile_update' %}">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-    <button type="submit" class="btn btn-primary">Update</button>
-    {% endbuttons %}
-  </form>
+<div class="row">
+  <div class="col-md-4">
+    <h2>Users</h2>
+    <p>These users are allowed to manage the profile.</p>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <th>User</th>
+          <th>Meta</th>
+        </thead>
+        <tbody>
+          {% for user in object.user.all %}
+          <tr>
+            <td>{{ user }}</td>
+            <td>{% if user != request.user %}<a href="#" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Add User</h3>
+    <form method="post" action="{% url 'grain:profile_update' %}">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% buttons %}
+      <button type="submit" class="btn btn-primary">Add</button>
+      {% endbuttons %}
+    </form>
+  </div>
 </div>
 {% endblock content %}

@@ -18,6 +18,12 @@ class BSDateInput(forms.TextInput):
         return mark_safe('\n'.join(output))
 
 
+class UsernameForm(forms.Form):
+    user = forms.ModelChoiceField(widget=forms.TextInput(),
+                                  queryset=User.objects.all(),
+                                  to_field_name='username')
+
+
 class ConsumerForm(forms.ModelForm):
     owner = forms.ModelChoiceField(widget=forms.HiddenInput(),
                                    queryset=UserProfile.objects.all())

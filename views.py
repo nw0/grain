@@ -12,7 +12,7 @@ from django.views import generic
 from moneyed import Money
 
 from .forms import (ConsumerForm, DishForm, IngredientForm, MealForm,
-                    ProductForm, TicketForm)
+                    ProductForm, TicketForm, UsernameForm)
 from .models import (Consumer, Dish, GrainEvent, Ingredient,
                      IngredientCategory, Meal, Product, Ticket, Unit,
                      UserProfile, Vendor)
@@ -39,6 +39,31 @@ class ProfileList(generic.ListView):
         return self.request.user.userprofile_set.all()
 
 
+class ProfileUpdate(UserPassesTestMixin, generic.edit.FormView):
+    form_class = UsernameForm
+    template_name = 'grain/userprofile_update.html'
+    success_url = reverse_lazy('grain:profile_update')
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileUpdate, self).get_context_data(**kwargs)
+        context['object'] = get_profile(self.request.session)
+        return context
+
+    def form_valid(self, form):
+        profile = get_profile(self.request.session)
+        if profile.user.filter(pk=form.cleaned_data['user'].pk).exists():
+            messages.error(self.request, "User already a member")
+        else:
+            profile.add_user(form.cleaned_data['user'])
+            messages.success(self.request,
+                             "Added %s" % form.cleaned_data['user'])
+        return super(ProfileUpdate, self).form_valid(form)
+
+
 class ProfileCreate(generic.edit.CreateView):
     model = UserProfile
     fields = ['note', 'currency']
@@ -48,20 +73,6 @@ class ProfileCreate(generic.edit.CreateView):
         form.instance.save()
         form.instance.user.add(self.request.user)
         return super(ProfileCreate, self).form_valid(form)
-
-
-class ProfileUpdate(UserPassesTestMixin, generic.edit.UpdateView):
-    fields = ['user']
-    template_name = 'grain/userprofile_update.html'
-    success_url = reverse_lazy('grain:profile_list')
-    login_url = reverse_lazy("grain:profile_list")
-
-    def test_func(self):
-        return 'grain_active_user_profile' in self.request.session
-
-    def get_object(self):
-        return get_object_or_404(UserProfile,
-            pk=self.request.session['grain_active_user_profile'])
 
 
 def profile_select(request, pk):

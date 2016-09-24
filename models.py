@@ -39,6 +39,9 @@ class UserProfile(models.Model):
     note = models.CharField(max_length=24)
     currency = CurrencyField(default='GBP')
 
+    def add_user(self, user):
+        self.user.add(user)
+
     def __str__(self):
         return "%s: %s" % (self.currency, self.note)
 
