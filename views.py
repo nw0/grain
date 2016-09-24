@@ -11,7 +11,8 @@ from django.shortcuts import get_object_or_404
 from django.views import generic
 from moneyed import Money
 
-from .forms import DishForm, IngredientForm, MealForm, ProductForm, TicketForm
+from .forms import (ConsumerForm, DishForm, IngredientForm, MealForm,
+                    ProductForm, TicketForm)
 from .models import (Consumer, Dish, GrainEvent, Ingredient,
                      IngredientCategory, Meal, Product, Ticket, Unit,
                      UserProfile, Vendor)
@@ -94,16 +95,17 @@ class ConsumerDetail(UserPassesTestMixin, generic.DetailView):
 
 class ConsumerCreate(UserPassesTestMixin, generic.edit.CreateView):
     model = Consumer
-    fields = ['name', 'actual_user']
+    form_class = ConsumerForm
     success_url = reverse_lazy('grain:consumer_list')
     login_url = reverse_lazy("grain:profile_list")
 
     def test_func(self):
         return 'grain_active_user_profile' in self.request.session
 
-    def form_valid(self, form):
-        form.instance.owner = get_profile(self.request.session)
-        return super(ConsumerCreate, self).form_valid(form)
+    def get_form_kwargs(self):
+        kwargs = super(ConsumerCreate, self).get_form_kwargs()
+        kwargs['profile'] = get_profile(self.request.session)
+        return kwargs
 
 
 class MealMonthArchiveFull(UserPassesTestMixin, generic.dates.MonthArchiveView):

@@ -7,7 +7,6 @@
 <h1>New Consumer</h1>
 
 <div class="col-md-4">
-  <p><em>Note: "actual user" is optional.</em></p>
   <form method="post" action="{% url 'grain:consumer_create' %}">
     {% csrf_token %}
     {% bootstrap_form form %}

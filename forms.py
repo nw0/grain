@@ -1,11 +1,12 @@
 import datetime
 
 from django import forms
+from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.utils.safestring import mark_safe
 from moneyed import Money
 
-from .models import Consumer, Dish, Ingredient, Meal, Product
+from .models import Consumer, Dish, Ingredient, Meal, Product, UserProfile
 
 
 class BSDateInput(forms.TextInput):
@@ -15,6 +16,44 @@ class BSDateInput(forms.TextInput):
                   '<span class="input-group-addon">',
                   '<i class="glyphicon glyphicon-calendar"></i></span></div>']
         return mark_safe('\n'.join(output))
+
+
+class ConsumerForm(forms.ModelForm):
+    owner = forms.ModelChoiceField(widget=forms.HiddenInput(),
+                                   queryset=UserProfile.objects.all())
+    actual_user = forms.ModelChoiceField(widget=forms.HiddenInput(),
+                                         queryset=User.objects.all(),
+                                         required=False)
+    username = forms.CharField(max_length=30, required=False,
+                               help_text="Specifying a user is optional")
+
+    def __init__(self, profile, *args, **kwargs):
+        super(ConsumerForm, self).__init__(*args, **kwargs)
+        self.fields['owner'].initial = profile
+
+    def clean(self):
+        cleaned_data = super(ConsumerForm, self).clean()
+        cleaned_data['owner'] = self.fields['owner'].initial
+
+        if Consumer.objects.filter(owner=cleaned_data['owner'],
+                                   name=cleaned_data['name']):
+            self.add_error('name', "Already have a consumer with that name")
+        if cleaned_data['username']:
+            try:
+                user = User.objects.get(username=self.cleaned_data['username'])
+            except:
+                user = None
+                self.add_error('username', "Couldn't find user")
+            cleaned_data['actual_user'] = user
+
+        if cleaned_data['actual_user'] and cleaned_data['owner'].consumer_set.\
+                filter(actual_user=cleaned_data['actual_user']).exists():
+            self.add_error('username',
+                           "This user is already a consumer in your profile")
+
+    class Meta:
+        model = Consumer
+        fields = ['name', 'actual_user', 'owner']
 
 
 class MealForm(forms.ModelForm):
