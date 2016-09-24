@@ -1,0 +1,22 @@
+{% extends "grain/base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+<h1>Confirmation</h1>
+
+<div class="col-md-4">
+  <form method="post" action="">
+    {% csrf_token %}
+    <p>
+      {% if warning %}
+      {{ warning }}
+      {% else %}
+      Are you sure you want to delete <em>{{ object }}</em>?
+      {% endif %}
+    </p>
+    {% buttons %}
+    <button type="submit" class="btn btn-danger">Delete</button>
+    {% endbuttons %}
+  </form>
+</div>
+{% endblock content %}

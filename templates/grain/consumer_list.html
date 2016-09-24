@@ -6,13 +6,26 @@
 {% block content %}
 <h1>Consumers <small>{% get_profile_name request.session.grain_active_user_profile %}</small> <a class="btn btn-primary" href="{% url 'grain:consumer_create' %}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a></h1>
 
-<div class="col-md-4">
-  <ul>
-    {% for object in object_list %}
-    <li><a href="{% url 'grain:consumer_detail' object.pk %}">{{ object }}</a></li>
-    {% empty %}
-    <li><em>Sorry, no consumers</em></li>
-    {% endfor %}
-  </ul>
+<div class="row">
+  <div class="col-md-4">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <th>Consumer</th>
+          <th>Linked user</th>
+          <th>Meta</th>
+        </thead>
+        <tbody>
+          {% for object in object_list %}
+          <tr>
+            <td><a href="{% url 'grain:consumer_detail' object.pk %}">{{ object }}</a></td>
+            <td>{{ object.actual_user|default_if_none:"&mdash;" }}</td>
+            <td>{% if not object.actual_user or object.owner not in object.actual_user.userprofile_set.all %}<a href="{% url 'grain:consumer_delete' object.pk %}" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete</a>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 {% endblock content %}

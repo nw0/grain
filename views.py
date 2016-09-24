@@ -136,6 +136,34 @@ class ConsumerCreate(UserPassesTestMixin, generic.edit.CreateView):
         return kwargs
 
 
+class ConsumerDelete(UserPassesTestMixin, generic.edit.DeleteView):
+    model = Consumer
+    template_name = "grain/generic_delete.html"
+    success_url = reverse_lazy("grain:consumer_list")
+    login_url = reverse_lazy("grain:profile_list")
+
+    def test_func(self):
+        return 'grain_active_user_profile' in self.request.session and \
+               get_profile(self.request.session) == self.get_object().owner
+
+    def get_context_data(self, **kwargs):
+        context = super(ConsumerDelete, self).get_context_data(**kwargs)
+        context['warning'] = ("Are you sure you want to delete the consumer "
+                              "'%s'? This will also delete ALL %s meals "
+                              "consumed by %s.") % (self.object,
+                              self.object.meal_set.count(), self.object)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        profile = get_profile(request.session)
+        consumer = self.get_object()
+
+        if profile.user.filter(pk=consumer.actual_user.pk).exists:
+            messages.warning(request, "Can't remove profile users")
+            return HttpResponseRedirect(reverse("grain:consumer_list"))
+        return super(ConsumerDelete, self).post(request, *args, **kwargs)
+
+
 class MealMonthArchiveFull(UserPassesTestMixin, generic.dates.MonthArchiveView):
     date_field = "time"
     allow_empty, allow_future = True, True
