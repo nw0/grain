@@ -501,7 +501,7 @@ def ticket_create(request):
     try:
         profile = get_profile(request.session)
     except PermissionDenied:
-        messages.error(self.request, "Please select a profile")
+        messages.error(request, "Please select a profile")
         return HttpResponseRedirect(reverse("grain:profile_list"))
 
     form = TicketForm(profile.pk, request.POST)
