@@ -76,7 +76,7 @@ def get_profile_name(pk):
 
 @register.inclusion_tag('grain/embeds/profile_list_nav.html')
 def get_profile_list(user):
-    return {'profiles': UserProfile.objects.filter(user=user)}
+    return {'profiles': UserProfile.objects.filter(user=user).order_by('pk')}
 
 
 @register.inclusion_tag('grain/embeds/ingredient_form_embed.html')
