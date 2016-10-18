@@ -154,7 +154,9 @@ class Ingredient(models.Model):
             self.save()
 
     def __str__(self):
-        return "%s" % self.product
+        return "%s %s (%g %s:%s)" % (self.product.get_vendor(),
+                                     self.product.name, self.amount,
+                                     self.product.units, self.used_amount)
 
 
 @python_2_unicode_compatible
