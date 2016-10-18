@@ -108,6 +108,8 @@ class Product(models.Model):
         return self.vendor if self.vendor else "Other"
 
     def __str__(self):
+        if not self.fixed:
+            return "%s %s" % (self.get_vendor(), self.name)
         return "%s %s (%g%s)" % (self.get_vendor(), self.name, self.amount,
                                  self.units)
 
@@ -152,7 +154,7 @@ class Ingredient(models.Model):
             self.save()
 
     def __str__(self):
-        return self.product
+        return "%s" % self.product
 
 
 @python_2_unicode_compatible
