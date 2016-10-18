@@ -132,7 +132,7 @@ class Ingredient(models.Model):
 
         self.used_amount += delta
         if self.used_amount != 0:
-            cpu = self.price / self.used_amount
+            cpu = self.price * (1 / self.used_amount)
         else:
             cpu = Money(0, self.price.currency.code)
         for ticket in self.ticket_set.all():
@@ -173,8 +173,8 @@ class Meal(models.Model):
     def cost_progress_breakdown(self):
         cost_tot, pc_closed, pc_open = self.cost_closed + self.cost_open, 0, 0
         if cost_tot:
-            pc_closed = 100 * self.cost_closed / cost_tot
-            pc_open = 100 * self.cost_open / cost_tot
+            pc_closed = 100 * self.cost_closed.amount / cost_tot.amount
+            pc_open = 100 * self.cost_open.amount / cost_tot.amount
         return (cost_tot, pc_closed, pc_open)
 
     def __str__(self):
