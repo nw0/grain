@@ -104,8 +104,12 @@ class Product(models.Model):
     units = models.ForeignKey(Unit)
     fixed = models.BooleanField(default=True)
 
+    def get_vendor(self):
+        return self.vendor if self.vendor else "Other"
+
     def __str__(self):
-        return "%s %s" % (self.vendor if self.vendor else "Other", self.name)
+        return "%s %s (%g%s)" % (self.get_vendor(), self.name, self.amount,
+                                 self.units)
 
 
 @python_2_unicode_compatible
@@ -148,7 +152,7 @@ class Ingredient(models.Model):
             self.save()
 
     def __str__(self):
-        return "%s" % self.product
+        return self.product
 
 
 @python_2_unicode_compatible
