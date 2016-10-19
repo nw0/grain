@@ -195,6 +195,7 @@ class Dish(models.Model):
     COOKING_STYLES = (
         ('frying',      "Fried"),
         ('boiling',     "Boiled"),
+        ('poaching',    "Poached"),
         ('baking',      "Baked"),
         ('roasting',    "Roasted"),
         ('uncooked',    "Uncooked"),
