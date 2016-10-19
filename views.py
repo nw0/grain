@@ -339,7 +339,8 @@ class IngredientListFull(UserPassesTestMixin, generic.ListView):
 
     def get_queryset(self):
         return Ingredient.objects.filter(
-            owner=get_profile(self.request.session))
+            owner=get_profile(self.request.session)).order_by('purchase_date',
+                                                              'best_before')
 
     def get_context_data(self, **kwargs):
         context = super(IngredientListFull, self).get_context_data(**kwargs)
