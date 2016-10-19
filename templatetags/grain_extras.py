@@ -59,7 +59,9 @@ def cal_cell(day):
 
 @register.inclusion_tag('grain/embeds/dish_list_embed.html')
 def dish_list(request, meal):
-    return {'dishes': meal.dish_set.all, 'request': request}
+    return {
+        'dishes': meal.dish_set.order_by('-cost_closed', '-cost_open', 'id'),
+        'request': request }
 
 
 @register.inclusion_tag('grain/embeds/cat_list_li.html')
