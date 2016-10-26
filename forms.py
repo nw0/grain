@@ -166,6 +166,6 @@ class TicketForm(forms.Form):
         super(TicketForm, self).__init__(*args, **kwargs)
         self.fields['ingredient'].queryset = Ingredient.objects.filter(
             exhausted=False, owner__pk=profile_pk
-        )
+        ).order_by('product__category__name', '-used_amount')
         self.fields['dish'].queryset = Dish.objects.filter(
             meal__owner__pk=profile_pk)
