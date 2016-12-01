@@ -12,10 +12,11 @@ BASELINE_MAX = 4    # FIXME: magic: default max meal cost (progress bar)
 @register.inclusion_tag('grain/cal/calendar.html')
 def calendar(month, meals):
     weeks = []
+    # Get the first listed day
     current_day = month - timedelta(days=month.weekday())
     meals, meal_it, meal_count = meals.order_by('time'), 0, len(meals)
 
-    while current_day.month <= month.month:
+    while current_day.month <= month.month and current_day.year <= month.year:
         week = []
         for d in range(1, 8):
             day = {
