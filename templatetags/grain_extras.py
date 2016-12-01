@@ -16,6 +16,9 @@ def calendar(month, meals):
     current_day = month - timedelta(days=month.weekday())
     meals, meal_it, meal_count = meals.order_by('time'), 0, len(meals)
 
+    while meals[meal_it].time.date() < current_day:
+        meal_it += 1
+
     while current_day.month <= month.month and current_day.year <= month.year:
         week = []
         for d in range(1, 8):
