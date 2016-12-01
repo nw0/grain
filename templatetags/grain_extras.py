@@ -15,11 +15,12 @@ def calendar(month, meals):
     # Get the first listed day
     current_day = month - timedelta(days=month.weekday())
     meals, meal_it, meal_count = meals.order_by('time'), 0, len(meals)
+    next_month = date(month.year if month.month < 12 else month.year + 1, month.month + 1 if month.month < 12 else 1, 1)
 
-    while meals[meal_it].time.date() < current_day:
+    while meal_count > 0 and meals[meal_it].time.date() < current_day:
         meal_it += 1
 
-    while current_day.month <= month.month and current_day.year <= month.year:
+    while current_day < next_month:
         week = []
         for d in range(1, 8):
             day = {
